@@ -67,7 +67,7 @@ export default function Engagement() {
 
     // First show the new submission prominently
     setNewSubmission(newResponse);
-    
+
     // After a delay, add it to the marquee
     setTimeout(() => {
       setResponses(prev => [newResponse, ...prev]);
@@ -82,13 +82,13 @@ export default function Engagement() {
     if (marqueeRef.current) {
       const marquee = marqueeRef.current;
       
-      // Create a single animation that loops
+      // Create a single animation that loops from left to right
       gsap.to(marquee, {
-        x: `-${marquee.offsetWidth / 2}px`,
-        duration: 12,
+        x: `${marquee.offsetWidth}px`,
+        duration: 5,
         ease: "none",
         repeat: -1,
-        yoyo: true
+        yoyo: false
       });
     }
 
@@ -113,6 +113,7 @@ export default function Engagement() {
           {/* Title */}
           <div className="text-center space-y-4">
             <h2 className="text-3xl md:text-5xl font-black text-[#f2f2f2] leading-tight">
+
               Share Your <span className="text-[#bf0414]">Mad</span> Idea
             </h2>
             <p className="text-lg text-[#f2f2f2]/80">
@@ -122,38 +123,29 @@ export default function Engagement() {
 
           {/* Input Form */}
           <form onSubmit={handleSubmit} className="relative">
-            <div className="flex gap-4">
+            <div className="relative">
               <input
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="What's your mad idea?"
-                className="flex-1 h-14 bg-[#121212] border border-[#333] rounded-full px-6 text-lg text-[#f2f2f2] placeholder-[#666] focus:outline-none focus:border-[#bf0414] transition-colors duration-300"
+                className="w-full h-10 bg-[#121212] border border-[#333] rounded-none px-5 pr-16 text-lg text-[#f2f2f2] placeholder-[#666] focus:outline-none focus:border-[#bf0414] transition-colors duration-300"
               />
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="h-14 bg-[#bf0414] hover:bg-[#950505] transition-all duration-300 px-6 rounded-full flex items-center justify-center disabled:opacity-50"
+                className="absolute right-0 top-0 h-10 w-10 bg-[#bf0414] hover:bg-[#950505] transition-all duration-300 flex items-center justify-center disabled:opacity-50"
               >
-                <svg 
-                  xmlns="http://www.w3.org/2000/svg" 
-                  fill="none" 
-                  viewBox="0 0 24 24" 
-                  strokeWidth={2} 
-                  stroke="#fff" 
-                  className={`w-6 h-6 transition-transform duration-300 ${isSubmitting ? 'animate-spin' : 'group-hover:scale-110'}`}
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M21.67 20.29a2.5 2.5 0 01-3.54 0l-5.42-5.42a7 7 0 01-6.36-9.19c.13-.36.6-.45.85-.2l3.1 3.1a1 1 0 001.41 0l2.12-2.12a1 1 0 000-1.41l-3.1-3.1c-.25-.25-.16-.72.2-.85a7 7 0 019.19 6.36l5.42 5.42a2.5 2.5 0 010 3.54l-2.12 2.12z" />
-                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-wrench"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
               </button>
             </div>
           </form>
 
           {/* New Submission Highlight */}
           {newSubmission && (
-            <div 
+            <div
               ref={newSubmissionRef}
-              className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#121212] p-8 rounded-2xl shadow-2xl border-2 border-[#bf0414] z-50"
+              className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#121212] p-8 rounded-none shadow-2xl border-2 border-[#bf0414] z-50"
             >
               <div className="text-center space-y-4">
                 <span className="text-4xl">{newSubmission.emoji}</span>
@@ -164,21 +156,22 @@ export default function Engagement() {
           )}
 
           {/* Marquee Container */}
-          <div className="relative overflow-hidden bg-[#121212]/40 backdrop-blur-sm rounded-2xl border border-[#333]">
+          <div className="relative overflow-hidden bg-[#121212]/40 backdrop-blur-sm rounded-none border border-[#333]">
             <div className="py-2">
-              <div 
+              <div
                 ref={marqueeRef}
                 className="flex space-x-8 whitespace-nowrap"
               >
                 {responses.map((response, index) => (
-                  <div 
+                  <div
                     key={index}
-                    className="inline-flex items-center space-x-4 px-4 py-2 bg-[#121212] rounded-full border border-[#333] hover:border-[#bf0414] transition-colors duration-300"
+                    className="inline-flex items-center space-x-4 px-4 py-2 rounded-none  hover:border-[#bf0414] transition-colors duration-300"
                   >
                     <span className="text-xl">{response.emoji}</span>
-                    <div>
-                      <p className="text-base font-semibold text-[#f2f2f2]">{response.idea}</p>
-                      <p className="text-sm text-[#bf0414]">{response.city}</p>
+                    <div className='flex gap-4 items-center'>
+                      <p className="text-base text-[#bf0414]">{response.city}</p>
+                      <p className="text-base">-</p>
+                      <p className="text-base font-semibold text-[#f2f2f2]"> {response.idea}</p>
                     </div>
                   </div>
                 ))}

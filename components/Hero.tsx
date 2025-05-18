@@ -46,7 +46,7 @@ export default function Hero() {
         muted
         className="absolute inset-0 w-full h-full object-cover scale-100"
       />
-      <div className="absolute inset-0 bg-black/30" />
+      <div className="absolute inset-0 " />
       <div className="relative h-full flex flex-col items-center justify-between py-10" ref={logoRef}>
         <h1 className="text-[2rem] md:text-[3.5rem] font-black tracking-[0.4em] text-[#bf0414] leading-none overflow-hidden text-center">
           <div className="flex items-center">

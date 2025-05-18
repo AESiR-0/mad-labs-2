@@ -15,7 +15,7 @@ export default function Home() {
       <Engagement />
       <Manifesto />
       <LaunchBlock />
-      <CTA />
+      {/* <CTA /> */}
       <CommunityCall />
       <Footer />
     </main>

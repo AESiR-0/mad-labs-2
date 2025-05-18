@@ -70,9 +70,9 @@ export default function Manifesto() {
           <p className="hover:text-[#bf0414] transition-colors duration-300 cursor-default">Just kids doing what adults asked them not to.</p>
           <p className="hover:text-[#bf0414] transition-colors duration-300 cursor-default">Mad Labs.</p>
           <p className="text-3xl md:text-4xl font-bold mt-12 text-center">
-            <span className="text-[#bf0414]">Break.</span>
-            <span className="text-white mx-4">Believe.</span>
-            <span className="text-[#bf0414]">Build.</span>
+            <span className="text-[#bf0414]">Break.
+              Believe.
+              Build.</span>
           </p>
         </div>
       </div>
