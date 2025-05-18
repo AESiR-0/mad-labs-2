@@ -39,7 +39,6 @@ export default function Hero() {
 
   return (
     <section className="relative h-screen overflow-hidden" ref={heroRef}>
-      <div className="flex items-center justify-center h-40 w-40 opacity-0"></div>
       <video
         src="/socrates.mp4"
         autoPlay
