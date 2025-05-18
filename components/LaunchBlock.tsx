@@ -49,80 +49,44 @@ export default function LaunchBlock() {
       </div>
 
       <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 relative z-10">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex justify-center gap-8 sm:gap-12 lg:gap-16">
-            {/* Calendar Section */}
-            {/* <div ref={calendarRef} className="flex flex-col items-center lg:items-start">
-              <div className="bg-[#121212]/50 backdrop-blur-sm rounded-xl sm:rounded-2xl p-6 sm:p-8 border border-[#333]/50 w-full max-w-md">
-                <div className="text-center mb-6 sm:mb-8">
-                  <h3 className="text-lg sm:text-xl font-semibold text-[#f2f2f2] mb-2">May 2025</h3>
-                  <div className="grid grid-cols-7 gap-2 sm:gap-3 text-sm sm:text-base text-[#f2f2f2]/60">
-                    {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map((day) => (
-                      <div key={day} className="text-center">{day}</div>
-                    ))}
+        <div className="max-w-4xl mx-auto">
+          {/* Mission Info Section */}
+          <div ref={infoRef} className="flex flex-col items-center justify-center">
+            <div className="space-y-8 sm:space-y-10 text-center">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-[#f2f2f2] leading-tight">
+                Join the <span className="text-[#bf0414]">Mission</span>
+              </h2>
+              <p className="text-base sm:text-lg md:text-xl text-[#f2f2f2]/60 max-w-2xl mx-auto">
+                Be part of something extraordinary. Join us on May 19, 2025, as we launch the next phase of innovation and collaboration.
+              </p>
+              <div className="flex flex-col sm:flex-row justify-center items-center gap-6 sm:gap-12  p-6 sm:p-8 rounded-none">
+                <div className="flex items-center space-x-4">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-[#bf0414]/20 rounded-none flex items-center justify-center">
+                    <svg className="w-5 h-5 sm:w-6 sm:h-6 text-[#bf0414]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                  </div>
+                  <div className="text-left">
+                    <h3 className="text-lg sm:text-xl font-semibold text-[#f2f2f2]">Launch Date</h3>
+                    <p className="text-base sm:text-lg text-[#f2f2f2]/60">May 19, 2025</p>
                   </div>
                 </div>
-                <div className="grid grid-cols-7 gap-2 sm:gap-3">
-                  {Array.from({ length: 31 }, (_, i) => i + 1).map((date) => (
-                    <div
-                      key={date}
-                      className={`aspect-square flex items-center justify-center rounded-lg sm:rounded-xl text-sm sm:text-base transition-all duration-300 ${
-                        date === 19
-                          ? 'bg-[#bf0414] text-white scale-110'
-                          : 'text-[#f2f2f2] hover:bg-[#333]/50 cursor-pointer'
-                      }`}
-                    >
-                      {date}
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div className="mt-6 sm:mt-8 text-center lg:text-left">
-                <div className="inline-flex items-center space-x-2 sm:space-x-3 bg-[#bf0414]/10 rounded-lg sm:rounded-xl px-4 sm:px-6 py-2 sm:py-3">
-                  <span className="text-[#bf0414] text-sm sm:text-base font-medium">19</span>
-                  <span className="text-[#f2f2f2]/60 text-sm sm:text-base">spots remaining</span>
-                </div>
-              </div>
-            </div> */}
-
-            {/* Mission Info Section */}
-            <div ref={infoRef} className="flex text-center flex-col justify-center">
-              <div className="space-y-6 sm:space-y-8">
-                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-[#f2f2f2] leading-tight">
-                  Join the <span className="text-[#bf0414]">Mission</span>
-                </h2>
-                <p className="text-base sm:text-lg text-[#f2f2f2]/60">
-                  Be part of something extraordinary. Join us on May 19, 2025, as we launch the next phase of innovation and collaboration.
-                </p>
-                <div className="flex justify-center gap-5 sm:space-y-6">
-                  <div className="flex justify-center items-center space-x-3 sm:space-x-4">
-                    <div className="w-8 h-8 sm:w-10 sm:h-10 bg-[#bf0414]/20 rounded-lg sm:rounded-xl flex items-center justify-center">
-                      <svg className="w-4 h-4 sm:w-5 sm:h-5 text-[#bf0414]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                      </svg>
-                    </div>
-                    <div>
-                      <h3 className="text-base sm:text-lg font-semibold text-[#f2f2f2]">Launch Date</h3>
-                      <p className="text-sm sm:text-base text-[#f2f2f2]/60">May 19, 2025</p>
-                    </div>
+                <div className="flex items-center space-x-4">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-[#bf0414]/20 rounded-none flex items-center justify-center">
+                    <svg className="w-5 h-5 sm:w-6 sm:h-6 text-[#bf0414]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
                   </div>
-                  <div className="flex justify-center items-center text-left space-x-3 sm:space-x-4">
-                    <div className="w-8 h-8 sm:w-10 sm:h-10 bg-[#bf0414]/20 rounded-lg sm:rounded-xl flex items-center justify-center">
-                      <svg className="w-4 h-4 sm:w-5 sm:h-5 text-[#bf0414]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                      </svg>
-                    </div>
-                    <div>
-                      <h3 className="text-base sm:text-lg font-semibold text-[#f2f2f2]">Location</h3>
-                      <p className="text-sm sm:text-base text-[#f2f2f2]/60">Ahmedabad, Gujarat</p>
-                    </div>
+                  <div className="text-left">
+                    <h3 className="text-lg sm:text-xl font-semibold text-[#f2f2f2]">Location</h3>
+                    <p className="text-base sm:text-lg text-[#f2f2f2]/60">Ahmedabad, Gujarat</p>
                   </div>
                 </div>
-                <button className="w-full sm:w-auto bg-[#bf0414] hover:bg-[#950505] text-white font-semibold px-6 sm:px-8 py-3 sm:py-4 rounded-lg sm:rounded-xl transition-colors duration-300">
-                  Join the Mission
-                </button>
               </div>
+              <button className="w-full sm:w-auto bg-[#bf0414] hover:bg-[#950505] text-white font-semibold px-8 sm:px-10 py-4 sm:py-5 rounded-none transition-colors duration-300 text-lg sm:text-xl">
+                Join the Mission
+              </button>
             </div>
           </div>
         </div>

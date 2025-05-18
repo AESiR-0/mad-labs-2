@@ -81,11 +81,11 @@ export default function Engagement() {
     // Marquee animation
     if (marqueeRef.current) {
       const marquee = marqueeRef.current;
-      
+
       // Create a single animation that loops from left to right
       gsap.to(marquee, {
-        x: `${marquee.offsetWidth}px`,
-        duration: 5,
+        x: `-${300 * responses.length}px`,
+        duration: 35,
         ease: "none",
         repeat: -1,
         yoyo: false
@@ -108,17 +108,13 @@ export default function Engagement() {
       {/* Animated grid background */}
       <div className="absolute inset-0 bg-[linear-gradient(rgba(191,4,20,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(191,4,20,0.1)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
 
-      <div className="container mx-auto px-4 md:px-20 lg:px-40 relative z-10">
-        <div className="max-w-3xl mx-auto space-y-12">
+      <div className="container mx-auto max-w-7xl px-4 md:px-20 lg:px-40 relative z-10">
+        <div className="max-w-6xl mx-auto space-y-8 md:space-y-12">
           {/* Title */}
           <div className="text-center space-y-4">
-            <h2 className="text-3xl md:text-5xl font-black text-[#f2f2f2] leading-tight">
-
-              Share Your <span className="text-[#bf0414]">Mad</span> Idea
+            <h2 className="text-2xl md:text-[2.5rem] font-bold text-[#f2f2f2] leading-tight">
+              What's one thing you wish you could build?
             </h2>
-            <p className="text-lg text-[#f2f2f2]/80">
-              Join the movement of innovators and dreamers
-            </p>
           </div>
 
           {/* Input Form */}
@@ -128,15 +124,15 @@ export default function Engagement() {
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="What's your mad idea?"
-                className="w-full h-10 bg-[#121212] border border-[#333] rounded-none px-5 pr-16 text-lg text-[#f2f2f2] placeholder-[#666] focus:outline-none focus:border-[#bf0414] transition-colors duration-300"
+                placeholder="A satellite. A tiny business. Something weird."
+                className="w-full h-10 bg-[#121212] border border-[#333] rounded-none px-4 md:px-5 pr-14 md:pr-16 text-base md:text-lg text-[#f2f2f2] placeholder-[#666] focus:outline-none focus:border-[#bf0414] transition-colors duration-300"
               />
               <button
                 type="submit"
                 disabled={isSubmitting}
                 className="absolute right-0 top-0 h-10 w-10 bg-[#bf0414] hover:bg-[#950505] transition-all duration-300 flex items-center justify-center disabled:opacity-50"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-wrench"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-wrench"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
               </button>
             </div>
           </form>
@@ -145,11 +141,11 @@ export default function Engagement() {
           {newSubmission && (
             <div
               ref={newSubmissionRef}
-              className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#121212] p-8 rounded-none shadow-2xl border-2 border-[#bf0414] z-50"
+              className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#121212] p-4 md:p-8 rounded-none shadow-2xl border-2 border-[#bf0414] z-50 w-[90%] md:w-auto"
             >
               <div className="text-center space-y-4">
-                <span className="text-4xl">{newSubmission.emoji}</span>
-                <p className="text-2xl font-bold text-[#f2f2f2]">{newSubmission.idea}</p>
+                <span className="text-3xl md:text-4xl">{newSubmission.emoji}</span>
+                <p className="text-xl md:text-2xl font-bold text-[#f2f2f2]">{newSubmission.idea}</p>
                 <p className="text-[#bf0414] font-medium">{newSubmission.city}</p>
               </div>
             </div>
@@ -157,21 +153,21 @@ export default function Engagement() {
 
           {/* Marquee Container */}
           <div className="relative overflow-hidden bg-[#121212]/40 backdrop-blur-sm rounded-none border border-[#333]">
-            <div className="py-2">
+            <div className="py-2 w-full">
               <div
                 ref={marqueeRef}
-                className="flex space-x-8 whitespace-nowrap"
+                className="flex space-x-4 md:space-x-8 w-full whitespace-nowrap"
               >
                 {responses.map((response, index) => (
                   <div
                     key={index}
-                    className="inline-flex items-center space-x-4 px-4 py-2 rounded-none  hover:border-[#bf0414] transition-colors duration-300"
+                    className="inline-flex items-center space-x-2 md:space-x-4 px-3 md:px-4 py-2 rounded-none hover:border-[#bf0414] transition-colors duration-300"
                   >
-                    <span className="text-xl">{response.emoji}</span>
-                    <div className='flex gap-4 items-center'>
-                      <p className="text-base text-[#bf0414]">{response.city}</p>
-                      <p className="text-base">-</p>
-                      <p className="text-base font-semibold text-[#f2f2f2]"> {response.idea}</p>
+                    <span className="text-lg md:text-xl">{response.emoji}</span>
+                    <div className='flex gap-2 md:gap-4 items-center'>
+                      <p className="text-sm md:text-base text-[#bf0414]">{response.city}</p>
+                      <p className="text-sm md:text-base">-</p>
+                      <p className="text-sm md:text-base font-semibold text-[#f2f2f2]"> {response.idea}</p>
                     </div>
                   </div>
                 ))}

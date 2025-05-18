@@ -28,52 +28,68 @@ export default function Manifesto() {
   }, []);
 
   return (
-    <section className="min-h-screen w-full px-4 md:px-20 lg:px-40 py-20 flex flex-col justify-center bg-black relative" ref={manifestoRef}>
+    <section className="min-h-screen w-full px-4 md:px-20 lg:px-40 py-12 md:py-20 flex flex-col justify-center bg-[#121212] relative" ref={manifestoRef}>
       {/* Background quote */}
       <div className="absolute inset-0 flex items-center justify-center opacity-5 pointer-events-none">
-        <p className="text-[20rem] font-black text-white rotate-[-15deg]">"</p>
+        <p className="text-[10rem] md:text-[20rem] font-black text-white rotate-[-15deg]">"</p>
       </div>
 
-      <div className="max-w-4xl mx-auto space-y-16 relative z-10">
+      <div className="w-full px-4 md:px-56 mx-auto space-y-8 md:space-y-16 relative z-10">
         {/* Title with gradient */}
-        <div className="text-center mb-20">
-          <h2 className="text-5xl md:text-7xl font-black tracking-tight">
-            <span className="text-[#bf0414]">Break.</span>
-            <span className="text-white mx-4">Believe.</span>
-            <span className="text-[#bf0414]">Build.</span>
+        <div className="text-center mb-10 md:mb-20">
+          <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold tracking-tight">
+            <span className="text-[#bf0414]">Break. Believe. Build.</span>
           </h2>
-          <div className="w-32 h-1 bg-[#bf0414] mx-auto mt-6"></div>
         </div>
 
-        <div className="space-y-6 text-xl md:text-2xl text-[#f2f2f2] font-light leading-relaxed">
-          <p className="hover:text-[#bf0414] transition-colors duration-300 cursor-default">We trained kids to colour inside the lines.</p>
-          <p className="hover:text-[#bf0414] transition-colors duration-300 cursor-default">To be quiet and wait for their turn.</p>
-          <p className="hover:text-[#bf0414] transition-colors duration-300 cursor-default">To raise their hand for permission.</p>
-          <p className="hover:text-[#bf0414] transition-colors duration-300 cursor-default">Because that's how it's done.</p>
-          <p className="hover:text-[#bf0414] transition-colors duration-300 cursor-default">We taught them to fill in blanks.</p>
-          <p className="hover:text-[#bf0414] transition-colors duration-300 cursor-default">To copy what the smart kid wrote.</p>
-          <p className="hover:text-[#bf0414] transition-colors duration-300 cursor-default">We punished wrong answers.</p>
-          <p className="hover:text-[#bf0414] transition-colors duration-300 cursor-default">We rewarded silence.</p>
-          <p className="hover:text-[#bf0414] transition-colors duration-300 cursor-default">We called it education.</p>
-          <p className="hover:text-[#bf0414] transition-colors duration-300 cursor-default">But it was actually training.</p>
-          <p className="hover:text-[#bf0414] transition-colors duration-300 cursor-default">Kids are born to build.</p>
-          <p className="hover:text-[#bf0414] transition-colors duration-300 cursor-default">To take things apart, make noise,</p>
-          <p className="hover:text-[#bf0414] transition-colors duration-300 cursor-default">And test ideas that are adult-stupid.</p>
-          <p className="hover:text-[#bf0414] transition-colors duration-300 cursor-default">So we built a Lab.</p>
-          <p className="hover:text-[#bf0414] transition-colors duration-300 cursor-default">For the Mad ones.</p>
-          <p className="hover:text-[#bf0414] transition-colors duration-300 cursor-default">The ones who don't want to sit in a row,</p>
-          <p className="hover:text-[#bf0414] transition-colors duration-300 cursor-default">Wear the uniform,</p>
-          <p className="hover:text-[#bf0414] transition-colors duration-300 cursor-default">And raise their hand to be heard.</p>
-          <p className="hover:text-[#bf0414] transition-colors duration-300 cursor-default">And build real things.</p>
-          <p className="hover:text-[#bf0414] transition-colors duration-300 cursor-default">Not later. Now.</p>
-          <p className="hover:text-[#bf0414] transition-colors duration-300 cursor-default">Nothing crazy.</p>
-          <p className="hover:text-[#bf0414] transition-colors duration-300 cursor-default">Just kids doing what adults asked them not to.</p>
-          <p className="hover:text-[#bf0414] transition-colors duration-300 cursor-default">Mad Labs.</p>
-          <p className="text-3xl md:text-4xl font-bold mt-12 text-center">
-            <span className="text-[#bf0414]">Break.
-              Believe.
-              Build.</span>
-          </p>
+        <div className="space-y-6 md:space-y-10 text-base md:text-lg lg:text-xl text-[#f2f2f2] font-light leading-relaxed">
+          <div className='flex flex-col gap-1 '>
+            <p className="hover:text-[#bf0414] transition-colors duration-300 cursor-default">We trained kids to colour inside the lines.</p>
+            <p className="hover:text-[#bf0414] transition-colors duration-300 cursor-default">To be quiet and wait for their turn.</p>
+            <p className="hover:text-[#bf0414] transition-colors duration-300 cursor-default">To raise their hand for permission.</p>
+            <p className="hover:text-[#bf0414] transition-colors duration-300 cursor-default">Because that's how it's done.</p>
+          </div>
+          <div className='flex flex-col gap-1 '>
+            <p className="hover:text-[#bf0414] transition-colors duration-300 cursor-default">We taught them to fill in blanks.</p>
+            <p className="hover:text-[#bf0414] transition-colors duration-300 cursor-default">To copy what the smart kid wrote.</p>
+            <p className="hover:text-[#bf0414] transition-colors duration-300 cursor-default">We punished wrong answers.</p>
+            <p className="hover:text-[#bf0414] transition-colors duration-300 cursor-default">We rewarded silence.</p>
+          </div>
+          <div className='flex flex-col gap-1 '>
+            <p className="hover:text-[#bf0414] transition-colors duration-300 cursor-default">We called it education.</p>
+            <p className="hover:text-[#bf0414] transition-colors duration-300 cursor-default">But it was actually training.</p>
+          </div>
+          <div className='flex flex-col gap-1 '>
+            <p className="hover:text-[#bf0414] transition-colors duration-300 cursor-default">Kids are born to build.</p>
+            <p className="hover:text-[#bf0414] transition-colors duration-300 cursor-default">To take things apart, make noise,</p>
+            <p className="hover:text-[#bf0414] transition-colors duration-300 cursor-default">And test ideas that are adult-stupid.</p>
+          </div>
+          <div className='flex flex-col gap-1 '>
+            <p className="hover:text-[#bf0414] transition-colors duration-300 cursor-default">So we built a Lab.</p>
+            <p className="hover:text-[#bf0414] transition-colors duration-300 cursor-default">For the Mad ones.</p>
+          </div>
+          <div className='flex flex-col gap-1 '>
+            <p className="hover:text-[#bf0414] transition-colors duration-300 cursor-default">The ones who don't want to sit in a row,</p>
+            <p className="hover:text-[#bf0414] transition-colors duration-300 cursor-default">Wear the uniform,</p>
+            <p className="hover:text-[#bf0414] transition-colors duration-300 cursor-default">And raise their hand to be heard.</p>
+          </div>
+          <div className='flex flex-col gap-1 '>
+            <p className="hover:text-[#bf0414] transition-colors duration-300 cursor-default">We built a place where kids meet—</p>
+            <p className="hover:text-[#bf0414] transition-colors duration-300 cursor-default">And build real things.</p>
+            <p className="hover:text-[#bf0414] transition-colors duration-300 cursor-default">Not later. Now.</p>
+          </div>
+          <div className='flex flex-col gap-1 '>
+            <p className="hover:text-[#bf0414] transition-colors duration-300 cursor-default">Nothing crazy.</p>
+            <p className="hover:text-[#bf0414] transition-colors duration-300 cursor-default">Just kids doing what adults asked them not to.</p>
+          </div>
+          <div className='flex flex-col gap-1 '>
+            <p className="hover:text-[#bf0414] transition-colors duration-300 cursor-default">Mad Labs.</p>
+            <p className="hover:text-[#bf0414] text-lg md:text-xl font-bold transition-colors duration-300 cursor-default">
+              <span className="text-[#bf0414]">Break.
+                Believe.
+                Build.</span>
+            </p>
+          </div>
         </div>
       </div>
     </section>

@@ -39,6 +39,7 @@ export default function Hero() {
 
   return (
     <section className="relative h-screen overflow-hidden" ref={heroRef}>
+      <div className="flex items-center justify-center h-40 w-40 opacity-0"></div>
       <video
         src="/socrates.mp4"
         autoPlay
@@ -47,7 +48,7 @@ export default function Hero() {
         className="absolute inset-0 w-full h-full object-cover scale-100"
       />
       <div className="absolute inset-0 " />
-      <div className="relative h-full flex flex-col items-center justify-between py-10" ref={logoRef}>
+      <div className="relative h-full flex flex-col items-center justify-between py-10 max-md:pb-28" ref={logoRef}>
         <h1 className="text-[2rem] md:text-[3.5rem] font-black tracking-[0.4em] text-[#bf0414] leading-none overflow-hidden text-center">
           <div className="flex items-center">
             <div className="overflow-hidden">
@@ -65,7 +66,7 @@ export default function Hero() {
             </div>
           </div>
         </h1>
-        <p className="text-lg md:text-xl uppercase tracking-[0.2em] text-[#f2f2f2] font-light text-center mt-4">Kids Building Real Things</p>
+        <p className="text-lg md:text-xl uppercase tracking-[0.2em] text-[#f2f2f2] font-light text-center ">Kids Building Real Things</p>
       </div>
     </section>
   );
