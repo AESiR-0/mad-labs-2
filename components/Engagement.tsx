@@ -16,22 +16,26 @@ export default function Engagement() {
   const [input, setInput] = useState('');
   const [userCity, setUserCity] = useState<string>('');
   const [responses, setResponses] = useState<Response[]>([
-    { city: 'Bangalore', idea: 'Solar-powered drone for traffic monitoring', emoji: '🚁' },
-    { city: 'Delhi', idea: 'Smart garden system for urban spaces', emoji: '🌱' },
-    { city: 'Mumbai', idea: 'AI-powered waste sorting robot', emoji: '🤖' },
-    { city: 'Chennai', idea: 'Water purification using nanotechnology', emoji: '💧' },
-    { city: 'Hyderabad', idea: 'AR-based learning platform', emoji: '🎮' },
-    { city: 'Kolkata', idea: 'Smart street lighting system', emoji: '💡' },
-    { city: 'Pune', idea: 'Eco-friendly packaging solution', emoji: '📦' },
-    { city: 'Jaipur', idea: 'Virtual reality museum tours', emoji: '🏛️' },
-    { city: 'Ahmedabad', idea: 'Smart parking management system', emoji: '🅿️' },
-    { city: 'Lucknow', idea: 'Air quality monitoring network', emoji: '🌫️' },
-    { city: 'Kanpur', idea: 'Automated irrigation system', emoji: '🌾' },
-    { city: 'Nagpur', idea: 'Solar-powered charging stations', emoji: '⚡' },
-    { city: 'Indore', idea: 'Smart waste collection system', emoji: '🗑️' },
-    { city: 'Thane', idea: 'Urban vertical farming solution', emoji: '🌿' },
-    { city: 'Bhopal', idea: 'Smart traffic signal system', emoji: '🚦' },
-    { city: 'Visakhapatnam', idea: 'Coastal erosion monitoring', emoji: '🌊' }
+    { city: 'Ahmedabad', idea: 'A sneaker brand for kids', emoji: '👟' },
+    { city: 'Mumbai', idea: 'A Pokémon review YouTube channel', emoji: '🎥' },
+    { city: 'Delhi', idea: 'A community to feed poor daily', emoji: '🥣' },
+    { city: 'Bangalore', idea: 'Anti-boring notebooks', emoji: '📓' },
+    { city: 'Pune', idea: 'A robot dog', emoji: '🤖' },
+    { city: 'Ahmedabad', idea: "A school, that's a game", emoji: '🎮' },
+    { city: 'Surat', idea: 'A vending machine for unlimited chocolate', emoji: '🍫' },
+    { city: 'Vadodara', idea: 'Do-my-homework robot', emoji: '📚' },
+    { city: 'Bangalore', idea: 'A YouTube show with my brother', emoji: '🎬' },
+    { city: 'Jaipur', idea: 'A drone that follows me', emoji: '🚁' },
+    { city: 'Mumbai', idea: 'A secret clubhouse', emoji: '🗝' },
+    { city: 'Indore', idea: 'An app to grade teachers', emoji: '📱' },
+    { city: 'Guwahati', idea: 'A solar-powered quick-dry for clothes', emoji: '🌞' },
+    { city: 'Ahmedabad', idea: 'A card game about Indian History', emoji: '🃏' },
+    { city: 'Bangalore', idea: 'Spotify for poems', emoji: '🎵' },
+    { city: 'Goa', idea: 'Trash picking robot for beaches', emoji: '🤖' },
+    { city: 'Rajkot', idea: 'Notebook with memes', emoji: '🔔' },
+    { city: 'Vadodara', idea: 'A bag with a built-in charger', emoji: '🎒' },
+    { city: 'Gandhinagar', idea: 'A board game about running a business', emoji: '🎲' },
+    { city: 'Delhi', idea: 'A hoodie that shows my mood', emoji: '🧥' }
   ]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [newSubmission, setNewSubmission] = useState<Response | null>(null);
@@ -104,12 +108,12 @@ export default function Engagement() {
   }, [newSubmission]);
 
   return (
-    <section className="min-h-screen w-full flex flex-col justify-center items-center bg-[#0a0a0a] relative overflow-hidden">
+    <section className="min-h-screen w-full flex flex-col justify-center items-center bg-[#121212] relative overflow-hidden">
       {/* Animated grid background */}
       <div className="absolute inset-0 bg-[linear-gradient(rgba(191,4,20,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(191,4,20,0.1)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
 
-      <div className="container mx-auto max-w-7xl px-4 md:px-20 lg:px-40 relative z-10">
-        <div className="max-w-6xl mx-auto space-y-8 md:space-y-12">
+      <div className="container mx-auto max-w-[73rem]   lg:px-40 relative z-10">
+        <div className="max-w-6xl mx-auto space-y-5 md:space-y-8">
           {/* Title */}
           <div className="text-center space-y-4">
             <h2 className="text-2xl md:text-[2.5rem] font-bold text-[#f2f2f2] leading-tight">
@@ -125,12 +129,12 @@ export default function Engagement() {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="A satellite. A tiny business. Something weird."
-                className="w-full h-10 bg-[#121212] border border-[#333] rounded-none px-4 md:px-5 pr-14 md:pr-16 text-base md:text-lg text-[#f2f2f2] placeholder-[#666] focus:outline-none focus:border-[#bf0414] transition-colors duration-300"
+                className="w-full h-12 bg-[#121212] border border-[#333] rounded-md  px-5 text-base  text-[#f2f2f2] placeholder-[#666] focus:outline-none focus:border-[#bf0414] transition-colors duration-300"
               />
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="absolute right-0 top-0 h-10 w-10 bg-[#bf0414] hover:bg-[#950505] transition-all duration-300 flex items-center justify-center disabled:opacity-50"
+                className="absolute right-0 top-0 h-12 w-10 bg-[#bf0414] hover:bg-[#950505] transition-all duration-300 flex items-center justify-center disabled:opacity-50"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-wrench"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
               </button>
@@ -141,7 +145,7 @@ export default function Engagement() {
           {newSubmission && (
             <div
               ref={newSubmissionRef}
-              className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#121212] p-4 md:p-8 rounded-none shadow-2xl border-2 border-[#bf0414] z-50 w-[90%] md:w-auto"
+              className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#121212] p-2 rounded-lg shadow-2xl border-2 border-[#bf0414] z-50 w-[90%] md:w-auto"
             >
               <div className="text-center space-y-4">
                 <span className="text-3xl md:text-4xl">{newSubmission.emoji}</span>
@@ -152,8 +156,8 @@ export default function Engagement() {
           )}
 
           {/* Marquee Container */}
-          <div className="relative overflow-hidden bg-[#121212]/40 backdrop-blur-sm rounded-none border border-[#333]">
-            <div className="py-2 w-full">
+          <div className="relative overflow-hidden bg-[#121212]/40 backdrop-blur-sm rounded-lg border border-[#333]">
+            <div className="py-1 w-full">
               <div
                 ref={marqueeRef}
                 className="flex space-x-4 md:space-x-8 w-full whitespace-nowrap"

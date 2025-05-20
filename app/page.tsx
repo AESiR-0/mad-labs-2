@@ -24,7 +24,7 @@ export default function Home() {
         href="https://wa.me/919925978977" 
         target="_blank" 
         rel="noopener noreferrer"
-        className="fixed bottom-8 right-8 bg-[#bf0414] hover:bg-[#950505] text-white p-3 rounded-none transition-all duration-300 group flex items-center gap-2 z-50 hover:scale-105 hover:shadow-lg hover:shadow-[#bf0414]/20 active:scale-95"
+        className="fixed bottom-8 rounded-full right-8 bg-[#bf0414] hover:bg-[#950505] text-white p-3  transition-all duration-300 group flex items-center gap-2 z-50 hover:scale-105 hover:shadow-lg hover:shadow-[#bf0414]/20 active:scale-95"
       >
         <div className="relative">
           <svg 
