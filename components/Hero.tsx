@@ -56,7 +56,7 @@ export default function Hero() {
           autoPlay
           loop
           muted
-          className="w-full h-full object-contain mix-blend-screen"
+          className="w-full h-full object-contain mix-blend-lighten"
         />
       </div>
 
