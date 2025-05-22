@@ -40,13 +40,26 @@ export default function Hero() {
 
   return (
     <section className="relative h-screen overflow-hidden" ref={heroRef}>
+      {/* Background Video */}
       <video
-        src="/socrates.mp4"
+        src="/animation_video/starry_bg.mp4"
         autoPlay
         loop
         muted
         className="absolute inset-0 w-full h-full object-cover scale-100"
       />
+
+      {/* Centered Animation Video */}
+      <div className="absolute inset-0 flex items-center justify-center">
+        <video
+          src="/animation_video/reverse_green.mp4"
+          autoPlay
+          loop
+          muted
+          className="w-full h-full object-contain mix-blend-screen"
+        />
+      </div>
+
       <div onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} className="absolute z-[9999] h-96 w-80 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
       <div className="relative h-full flex flex-col items-center justify-between py-10 max-md:pb-28" ref={logoRef}>
         <h1 className="text-[2rem] md:text-[3.5rem] font-black tracking-[0.4em] text-[#bf0414] leading-none overflow-hidden text-center">
