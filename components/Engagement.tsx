@@ -69,15 +69,23 @@ export default function Engagement() {
       emoji: '💡'
     };
 
-    // First show the new submission prominently
+    // Add to marquee immediately
+    setResponses(prev => [newResponse, ...prev]);
+    
+    // Show the highlight animation
     setNewSubmission(newResponse);
 
-    // After a delay, add it to the marquee
+    // After a delay, clear the highlight and scroll to launch section
     setTimeout(() => {
-      setResponses(prev => [newResponse, ...prev]);
       setNewSubmission(null);
       setInput('');
       setIsSubmitting(false);
+      
+      // Scroll to launch section
+      const launchSection = document.getElementById('launch');
+      if (launchSection) {
+        launchSection.scrollIntoView({ behavior: 'smooth' });
+      }
     }, 2000);
   };
 
@@ -108,7 +116,7 @@ export default function Engagement() {
   }, [newSubmission]);
 
   return (
-    <section className="min-h-screen w-full flex flex-col justify-center items-center bg-[#121212] relative overflow-hidden">
+    <section className="min-h-[60vh] w-full flex flex-col justify-center items-center bg-[#121212] relative overflow-hidden">
       {/* Animated grid background */}
       <div className="absolute inset-0 bg-[linear-gradient(rgba(191,4,20,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(191,4,20,0.1)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
 
@@ -117,7 +125,7 @@ export default function Engagement() {
           {/* Title */}
           <div className="text-center space-y-4">
             <h2 className="text-2xl md:text-[2.5rem] font-bold text-[#f2f2f2] leading-tight">
-              What's one thing you wish you could build?
+              What would you build (or break) if nobody said no?
             </h2>
           </div>
 

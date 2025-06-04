@@ -79,10 +79,10 @@ export default function Hero() {
             </div>
           </div>
         </h1>
-        <p className="text-lg md:text-xl uppercase tracking-[0.2em] text-[#f2f2f2] font-light text-center">Kids Building Real Things</p>
+        <p className="text-lg md:text-xl uppercase tracking-[0.2em] text-[#f2f2f2] font-light text-center">For kids who break, & build.</p>
       </div>
 
-      {/* Dialog Box */}
+      {/* Dialog Box
       <div className="absolute inset-0 flex items-center ml-40 justify-center z-[9999] pointer-events-none">
         <div className="h-40 w-20 relative">
           <div className={`absolute -top-40 -right-20 text-center left-1/2 transform -translate-x-1/2 transition-all duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
@@ -92,7 +92,7 @@ export default function Hero() {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </section>
   );
 } 

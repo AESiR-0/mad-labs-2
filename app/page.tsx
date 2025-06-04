@@ -7,15 +7,67 @@ import LaunchBlock from '@/components/LaunchBlock';
 import CTA from '@/components/CTA';
 import CommunityCall from '@/components/CommunityCall';
 import Footer from '@/components/Footer';
-
+import Link from 'next/link';
+import { useState, useEffect } from 'react';
+import Testimonials from '@/components/Testimonials';
+import FAQs from '@/components/FAQs';
 export default function Home() {
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [hasScrolled, setHasScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY;
+      const windowHeight = window.innerHeight;
+      
+      // Only show navbar after scrolling past the first section (Hero)
+      if (scrollPosition > windowHeight * 0.8) {
+        setIsScrolled(true);
+        setHasScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
     <main className="min-h-screen bg-black text-[#f2f2f2] relative">
+      {/* Navigation Bar */}
+      <nav 
+        className={`fixed top-0 left-0 right-0 z-50 px-8 py-6 backdrop-blur-md bg-black/30 transition-all duration-500 ${
+          hasScrolled 
+            ? isScrolled 
+              ? 'translate-y-0' 
+              : '-translate-y-full'
+            : '-translate-y-full'
+        }`}
+      >
+        <div className="max-w-7xl mx-auto flex justify-end items-center">
+          <div className="flex items-center space-x-12">
+            <Link 
+              href="/learning-principles" 
+              className="text-[#f2f2f2] hover:text-[#bf0414] transition-all duration-300 text-base font-medium tracking-wider hover:scale-105"
+            >
+              Mad Labs Learning Principles
+            </Link>
+            <Link 
+              href="/theory-of-parenting" 
+              className="text-[#f2f2f2] hover:text-[#bf0414] transition-all duration-300 text-base font-medium tracking-wider hover:scale-105"
+            >
+              Mad Labs Theory of Parenting
+            </Link>
+          </div>
+        </div>
+      </nav>
+
       <Hero />
-      <Engagement />
       <Manifesto />
+      <Engagement />
       <LaunchBlock />
-      {/* <CTA /> */}
+      <FAQs />
       <CommunityCall />
       <Footer />
 
