@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { z } from "zod";
 import gsap from "gsap";
-import { handleKidForm, handleParentForm } from '@/lib/googleSheets';
+
 import FAQAccordion from '@/components/FAQs';
 
 const roleSchema = z.enum(["kid", "parent"]);
@@ -91,7 +91,8 @@ function ThankYouScreen() {
 }
 
 export default function ApplyPage() {
-  const [currentStep, setCurrentStep] = useState(1);
+  const [currentStep, setCurrentStep] = useState(0); // 0 for role selection
+  const [role, setRole] = useState<'kid' | 'parent' | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<{
     type: 'success' | 'error' | null;
@@ -101,27 +102,20 @@ export default function ApplyPage() {
   const [formData, setFormData] = useState({
     // Kid's Information
     name: '',
-    age: '',
     email: '',
     phone: '',
+    age: '',
     city: '',
-    interests: '',
-    whyJoin: '',
-    projectIdea: '',
-    availability: '',
-    additional: '',
+    curious: '',
 
     // Parent's Information
     parentName: '',
     parentEmail: '',
     parentPhone: '',
+    parentCity: '',
     kidName: '',
     kidAge: '',
-    parentCity: '',
-    whyMadLabs: '',
-    expectations: '',
-    parentAvailability: '',
-    parentAdditional: ''
+    parentCurious: ''
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -132,77 +126,181 @@ export default function ApplyPage() {
     }));
   };
 
+  const handleRoleSelect = (selectedRole: 'kid' | 'parent') => {
+    setRole(selectedRole);
+    setCurrentStep(1);
+  };
+
   const handleNext = async () => {
-    if (currentStep === 1) {
-      // Validate kid's form
-      if (!formData.name || !formData.age || !formData.email || !formData.phone || !formData.city) {
+    if (currentStep === 0) return; // Role selection handled separately
+
+    if (role === 'kid') {
+      if (currentStep === 1 && !formData.name) {
         setSubmitStatus({
           type: 'error',
-          message: 'Please fill in all required fields'
+          message: 'Please enter your name'
         });
         return;
       }
-      setCurrentStep(2);
-    } else if (currentStep === 2) {
-      // Validate parent's form
-      if (!formData.parentName || !formData.parentEmail || !formData.parentPhone) {
+      if (currentStep === 2 && (!formData.email || !formData.phone)) {
         setSubmitStatus({
           type: 'error',
-          message: 'Please fill in all required fields'
+          message: 'Please provide both email and phone'
         });
         return;
       }
-
-      setIsSubmitting(true);
-      setSubmitStatus({ type: null, message: '' });
-
-      try {
-        // Submit kid's form
-        await handleKidForm({
-          name: formData.name,
-          age: formData.age,
-          email: formData.email,
-          phone: formData.phone,
-          city: formData.city,
-          interests: formData.interests,
-          whyJoin: formData.whyJoin,
-          projectIdea: formData.projectIdea,
-          availability: formData.availability,
-          additional: formData.additional
-        });
-
-        // Submit parent's form
-        await handleParentForm({
-          parentName: formData.parentName,
-          parentEmail: formData.parentEmail,
-          parentPhone: formData.parentPhone,
-          kidName: formData.name, // Use kid's name from first form
-          kidAge: formData.age, // Use kid's age from first form
-          city: formData.parentCity,
-          whyMadLabs: formData.whyMadLabs,
-          expectations: formData.expectations,
-          availability: formData.parentAvailability,
-          additional: formData.parentAdditional
-        });
-
-        setSubmitStatus({
-          type: 'success',
-          message: 'Application submitted successfully! We\'ll be in touch soon.'
-        });
-        setCurrentStep(3); // Move to thank you screen
-      } catch (error) {
+      if (currentStep === 3 && !formData.age) {
         setSubmitStatus({
           type: 'error',
-          message: 'Failed to submit application. Please try again.'
+          message: 'Please enter your age'
         });
-      } finally {
-        setIsSubmitting(false);
+        return;
+      }
+      if (currentStep === 4 && !formData.city) {
+        setSubmitStatus({
+          type: 'error',
+          message: 'Please enter your city'
+        });
+        return;
+      }
+      if (currentStep === 5 && !formData.curious) {
+        setSubmitStatus({
+          type: 'error',
+          message: 'Please tell us what you\'re curious about'
+        });
+        return;
+      }
+      if (currentStep === 5) {
+        setIsSubmitting(true);
+        setSubmitStatus({ type: null, message: '' });
+
+        try {
+          const response = await fetch('/api/submit-application', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              kidData: {
+                name: formData.name,
+                email: formData.email,
+                phone: formData.phone,
+                age: formData.age,
+                city: formData.city,
+                curious: formData.curious
+              }
+            }),
+          });
+
+          if (!response.ok) {
+            throw new Error('Failed to submit application');
+          }
+
+          setSubmitStatus({
+            type: 'success',
+            message: 'Application submitted successfully! We\'ll be in touch soon.'
+          });
+          setCurrentStep(6); // Move to thank you screen
+        } catch (error) {
+          setSubmitStatus({
+            type: 'error',
+            message: 'Failed to submit application. Please try again.'
+          });
+        } finally {
+          setIsSubmitting(false);
+        }
+        return;
+      }
+    } else if (role === 'parent') {
+      if (currentStep === 1 && !formData.parentName) {
+        setSubmitStatus({
+          type: 'error',
+          message: 'Please enter your name'
+        });
+        return;
+      }
+      if (currentStep === 2 && (!formData.parentEmail || !formData.parentPhone)) {
+        setSubmitStatus({
+          type: 'error',
+          message: 'Please provide both email and phone'
+        });
+        return;
+      }
+      if (currentStep === 3 && !formData.parentCity) {
+        setSubmitStatus({
+          type: 'error',
+          message: 'Please enter your city'
+        });
+        return;
+      }
+      if (currentStep === 4 && (!formData.kidName || !formData.kidAge)) {
+        setSubmitStatus({
+          type: 'error',
+          message: 'Please provide your kid\'s name and age'
+        });
+        return;
+      }
+      if (currentStep === 5 && !formData.parentCurious) {
+        setSubmitStatus({
+          type: 'error',
+          message: 'Please tell us what you think your child is curious about'
+        });
+        return;
+      }
+      if (currentStep === 5) {
+        setIsSubmitting(true);
+        setSubmitStatus({ type: null, message: '' });
+
+        try {
+          const response = await fetch('/api/submit-application', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              parentData: {
+                parentName: formData.parentName,
+                parentEmail: formData.parentEmail,
+                parentPhone: formData.parentPhone,
+                parentCity: formData.parentCity,
+                kidName: formData.kidName,
+                kidAge: formData.kidAge,
+                parentCurious: formData.parentCurious
+              }
+            }),
+          });
+
+          if (!response.ok) {
+            throw new Error('Failed to submit application');
+          }
+
+          setSubmitStatus({
+            type: 'success',
+            message: 'Application submitted successfully! We\'ll be in touch soon.'
+          });
+          setCurrentStep(6); // Move to thank you screen
+        } catch (error) {
+          setSubmitStatus({
+            type: 'error',
+            message: 'Failed to submit application. Please try again.'
+          });
+        } finally {
+          setIsSubmitting(false);
+        }
+        return;
       }
     }
+
+    setCurrentStep(prev => prev + 1);
   };
 
   const handleBack = () => {
-    setCurrentStep(prev => prev - 1);
+    if (currentStep === 1) {
+      setCurrentStep(0);
+      setRole(null);
+    } else {
+      setCurrentStep(prev => prev - 1);
+    }
   };
 
   return (
@@ -219,19 +317,42 @@ export default function ApplyPage() {
       {/* Overlay for readability */}
       <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-10 pointer-events-none" />
       <div className="w-full max-w-2xl bg-white/10 border border-white/10 rounded-2xl p-12 shadow-2xl relative z-20 backdrop-blur-md bg-clip-padding transition-all duration-500 hover:shadow-3xl flex flex-col gap-8">
-        {currentStep === 3 ? (
+        {currentStep === 6 ? (
           <ThankYouScreen />
+        ) : currentStep === 0 ? (
+          // Role Selection Screen
+          <div className="flex flex-col items-center gap-8 text-center">
+            <h2 className="text-3xl font-black text-white tracking-tight">I'm a</h2>
+            <div className="flex gap-6">
+              <button
+                onClick={() => handleRoleSelect('kid')}
+                className="px-8 py-4 bg-[#bf0414] text-white font-medium rounded-lg hover:bg-[#950505] transition-colors"
+              >
+                Kid
+              </button>
+              <button
+                onClick={() => handleRoleSelect('parent')}
+                className="px-8 py-4 bg-[#bf0414] text-white font-medium rounded-lg hover:bg-[#950505] transition-colors"
+              >
+                Parent
+              </button>
+            </div>
+          </div>
         ) : (
           <>
             {/* Progress Bar */}
             <div className="w-full mb-4">
               <div className="flex justify-between items-center mb-2">
-                <span className="text-white/70 text-sm">Step {currentStep} of 2</span>
+                <span className="text-white/70 text-sm">Step {currentStep} of {role === 'kid' ? 5 : 5}</span>
               </div>
               <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
-                <div className="h-2 bg-[#bf0414] rounded-full transition-all duration-500" style={{ width: "100%" }} />
+                <div 
+                  className="h-2 bg-[#bf0414] rounded-full transition-all duration-500" 
+                  style={{ width: `${(currentStep / 5) * 100}%` }} 
+                />
               </div>
             </div>
+
             <div>
               {submitStatus.type && (
                 <div className={`mb-8 p-4 rounded-lg ${
@@ -242,256 +363,259 @@ export default function ApplyPage() {
               )}
 
               <div className="space-y-12">
-                {currentStep === 1 ? (
-                  // Kid's Form
-                  <div className="space-y-6">
-                    <h3 className="text-xl font-bold text-white mb-6">👤 Kid's Information</h3>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                      <div>
-                        <label htmlFor="name" className="block text-sm font-medium text-white/80 mb-2">Name *</label>
+                {role === 'kid' && (
+                  <>
+                    {currentStep === 1 && (
+                      <div className="space-y-6">
+                        <h3 className="text-2xl font-bold text-white mb-6">What's your name?</h3>
                         <input
                           type="text"
-                          id="name"
                           name="name"
                           value={formData.name}
                           onChange={handleChange}
-                          className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#bf0414] transition-colors"
+                          className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white text-lg focus:outline-none focus:border-[#bf0414] transition-colors"
+                          placeholder="Enter your name"
                           required
                         />
                       </div>
-                      <div>
-                        <label htmlFor="age" className="block text-sm font-medium text-white/80 mb-2">Age *</label>
+                    )}
+
+                    {currentStep === 2 && (
+                      <div className="space-y-6">
+                        <h3 className="text-2xl font-bold text-white mb-6">How do we contact you?</h3>
+                        <div className="space-y-4">
+                          <input
+                            type="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white text-lg focus:outline-none focus:border-[#bf0414] transition-colors"
+                            placeholder="Your email"
+                            required
+                          />
+                          <input
+                            type="tel"
+                            name="phone"
+                            value={formData.phone}
+                            onChange={handleChange}
+                            className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white text-lg focus:outline-none focus:border-[#bf0414] transition-colors"
+                            placeholder="Your phone number"
+                            required
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    {currentStep === 3 && (
+                      <div className="space-y-6">
+                        <h3 className="text-2xl font-bold text-white mb-6">How old are you?</h3>
                         <input
                           type="number"
-                          id="age"
                           name="age"
                           value={formData.age}
                           onChange={handleChange}
-                          className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#bf0414] transition-colors"
+                          className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white text-lg focus:outline-none focus:border-[#bf0414] transition-colors"
+                          placeholder="Enter your age"
                           required
                         />
                       </div>
-                      <div>
-                        <label htmlFor="email" className="block text-sm font-medium text-white/80 mb-2">Email *</label>
-                        <input
-                          type="email"
-                          id="email"
-                          name="email"
-                          value={formData.email}
-                          onChange={handleChange}
-                          className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#bf0414] transition-colors"
-                          required
-                        />
-                      </div>
-                      <div>
-                        <label htmlFor="phone" className="block text-sm font-medium text-white/80 mb-2">Phone *</label>
-                        <input
-                          type="tel"
-                          id="phone"
-                          name="phone"
-                          value={formData.phone}
-                          onChange={handleChange}
-                          className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#bf0414] transition-colors"
-                          required
-                        />
-                      </div>
-                      <div>
-                        <label htmlFor="city" className="block text-sm font-medium text-white/80 mb-2">City *</label>
+                    )}
+
+                    {currentStep === 4 && (
+                      <div className="space-y-6">
+                        <h3 className="text-2xl font-bold text-white mb-6">Where do you live?</h3>
                         <input
                           type="text"
-                          id="city"
                           name="city"
                           value={formData.city}
                           onChange={handleChange}
-                          className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#bf0414] transition-colors"
+                          className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white text-lg focus:outline-none focus:border-[#bf0414] transition-colors"
+                          placeholder="Enter your city"
                           required
                         />
                       </div>
-                    </div>
+                    )}
 
-                    <div>
-                      <label htmlFor="interests" className="block text-sm font-medium text-white/80 mb-2">What are you interested in?</label>
-                      <textarea
-                        id="interests"
-                        name="interests"
-                        value={formData.interests}
-                        onChange={handleChange}
-                        rows={3}
-                        className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#bf0414] transition-colors"
-                      />
-                    </div>
+                    {currentStep === 5 && (
+                      <div className="space-y-6">
+                        <h3 className="text-2xl font-bold text-white mb-6">What are you most curious about?</h3>
+                        <textarea
+                          name="curious"
+                          value={formData.curious}
+                          onChange={handleChange}
+                          rows={4}
+                          className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white text-lg focus:outline-none focus:border-[#bf0414] transition-colors"
+                          placeholder="Tell us what you're curious about..."
+                          required
+                        />
+                      </div>
+                    )}
+                  </>
+                )}
 
-                    <div>
-                      <label htmlFor="whyJoin" className="block text-sm font-medium text-white/80 mb-2">Why do you want to join Mad Labs?</label>
-                      <textarea
-                        id="whyJoin"
-                        name="whyJoin"
-                        value={formData.whyJoin}
-                        onChange={handleChange}
-                        rows={3}
-                        className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#bf0414] transition-colors"
-                      />
-                    </div>
-
-                    <div>
-                      <label htmlFor="projectIdea" className="block text-sm font-medium text-white/80 mb-2">Do you have any project ideas in mind?</label>
-                      <textarea
-                        id="projectIdea"
-                        name="projectIdea"
-                        value={formData.projectIdea}
-                        onChange={handleChange}
-                        rows={3}
-                        className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#bf0414] transition-colors"
-                      />
-                    </div>
-
-                    <div>
-                      <label htmlFor="availability" className="block text-sm font-medium text-white/80 mb-2">Are you available for the full 15 days?</label>
-                      <textarea
-                        id="availability"
-                        name="availability"
-                        value={formData.availability}
-                        onChange={handleChange}
-                        rows={2}
-                        className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#bf0414] transition-colors"
-                      />
-                    </div>
-
-                    <div>
-                      <label htmlFor="additional" className="block text-sm font-medium text-white/80 mb-2">Anything else we should know?</label>
-                      <textarea
-                        id="additional"
-                        name="additional"
-                        value={formData.additional}
-                        onChange={handleChange}
-                        rows={2}
-                        className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#bf0414] transition-colors"
-                      />
-                    </div>
-                  </div>
-                ) : (
-                  // Parent's Form
-                  <div className="space-y-6">
-                    <h3 className="text-xl font-bold text-white mb-6">👨‍👩‍👧‍👦 Parent's Information</h3>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                      <div>
-                        <label htmlFor="parentName" className="block text-sm font-medium text-white/80 mb-2">Parent's Name *</label>
+                {role === 'parent' && (
+                  <>
+                    {currentStep === 1 && (
+                      <div className="space-y-6">
+                        <h3 className="text-2xl font-bold text-white mb-6">Your name</h3>
                         <input
                           type="text"
-                          id="parentName"
                           name="parentName"
                           value={formData.parentName}
                           onChange={handleChange}
-                          className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#bf0414] transition-colors"
+                          className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white text-lg focus:outline-none focus:border-[#bf0414] transition-colors"
+                          placeholder="Enter your name"
                           required
                         />
                       </div>
-                      <div>
-                        <label htmlFor="parentEmail" className="block text-sm font-medium text-white/80 mb-2">Parent's Email *</label>
-                        <input
-                          type="email"
-                          id="parentEmail"
-                          name="parentEmail"
-                          value={formData.parentEmail}
-                          onChange={handleChange}
-                          className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#bf0414] transition-colors"
-                          required
-                        />
+                    )}
+
+                    {currentStep === 2 && (
+                      <div className="space-y-6">
+                        <h3 className="text-2xl font-bold text-white mb-6">Your contact</h3>
+                        <div className="space-y-4">
+                          <input
+                            type="email"
+                            name="parentEmail"
+                            value={formData.parentEmail}
+                            onChange={handleChange}
+                            className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white text-lg focus:outline-none focus:border-[#bf0414] transition-colors"
+                            placeholder="Your email"
+                            required
+                          />
+                          <input
+                            type="tel"
+                            name="parentPhone"
+                            value={formData.parentPhone}
+                            onChange={handleChange}
+                            className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white text-lg focus:outline-none focus:border-[#bf0414] transition-colors"
+                            placeholder="Your phone number"
+                            required
+                          />
+                        </div>
                       </div>
-                      <div>
-                        <label htmlFor="parentPhone" className="block text-sm font-medium text-white/80 mb-2">Parent's Phone *</label>
-                        <input
-                          type="tel"
-                          id="parentPhone"
-                          name="parentPhone"
-                          value={formData.parentPhone}
-                          onChange={handleChange}
-                          className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#bf0414] transition-colors"
-                          required
-                        />
-                      </div>
-                      <div>
-                        <label htmlFor="parentCity" className="block text-sm font-medium text-white/80 mb-2">City</label>
+                    )}
+
+                    {currentStep === 3 && (
+                      <div className="space-y-6">
+                        <h3 className="text-2xl font-bold text-white mb-6">Your city</h3>
                         <input
                           type="text"
-                          id="parentCity"
                           name="parentCity"
                           value={formData.parentCity}
                           onChange={handleChange}
-                          className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#bf0414] transition-colors"
+                          className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white text-lg focus:outline-none focus:border-[#bf0414] transition-colors"
+                          placeholder="Enter your city"
+                          required
                         />
                       </div>
-                    </div>
+                    )}
 
-                    <div>
-                      <label htmlFor="whyMadLabs" className="block text-sm font-medium text-white/80 mb-2">Why do you want your child to join Mad Labs?</label>
-                      <textarea
-                        id="whyMadLabs"
-                        name="whyMadLabs"
-                        value={formData.whyMadLabs}
-                        onChange={handleChange}
-                        rows={3}
-                        className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#bf0414] transition-colors"
-                      />
-                    </div>
+                    {currentStep === 4 && (
+                      <div className="space-y-6">
+                        <h3 className="text-2xl font-bold text-white mb-6">Your kid's name & age</h3>
+                        <div className="space-y-4">
+                          <input
+                            type="text"
+                            name="kidName"
+                            value={formData.kidName}
+                            onChange={handleChange}
+                            className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white text-lg focus:outline-none focus:border-[#bf0414] transition-colors"
+                            placeholder="Kid's name"
+                            required
+                          />
+                          <input
+                            type="number"
+                            name="kidAge"
+                            value={formData.kidAge}
+                            onChange={handleChange}
+                            className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white text-lg focus:outline-none focus:border-[#bf0414] transition-colors"
+                            placeholder="Kid's age"
+                            required
+                          />
+                        </div>
+                      </div>
+                    )}
 
-                    <div>
-                      <label htmlFor="expectations" className="block text-sm font-medium text-white/80 mb-2">What are your expectations from the program?</label>
-                      <textarea
-                        id="expectations"
-                        name="expectations"
-                        value={formData.expectations}
-                        onChange={handleChange}
-                        rows={3}
-                        className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#bf0414] transition-colors"
-                      />
-                    </div>
-
-                    <div>
-                      <label htmlFor="parentAvailability" className="block text-sm font-medium text-white/80 mb-2">Are you available for parent check-ins?</label>
-                      <textarea
-                        id="parentAvailability"
-                        name="parentAvailability"
-                        value={formData.parentAvailability}
-                        onChange={handleChange}
-                        rows={2}
-                        className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#bf0414] transition-colors"
-                      />
-                    </div>
-
-                    <div>
-                      <label htmlFor="parentAdditional" className="block text-sm font-medium text-white/80 mb-2">Anything else we should know?</label>
-                      <textarea
-                        id="parentAdditional"
-                        name="parentAdditional"
-                        value={formData.parentAdditional}
-                        onChange={handleChange}
-                        rows={2}
-                        className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#bf0414] transition-colors"
-                      />
-                    </div>
-                  </div>
+                    {currentStep === 5 && (
+                      <div className="space-y-6">
+                        <h3 className="text-2xl font-bold text-white mb-6">What do you think your child is deeply curious about?</h3>
+                        <textarea
+                          name="parentCurious"
+                          value={formData.parentCurious}
+                          onChange={handleChange}
+                          rows={4}
+                          className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white text-lg focus:outline-none focus:border-[#bf0414] transition-colors"
+                          placeholder="Tell us what you think your child is curious about..."
+                          required
+                        />
+                      </div>
+                    )}
+                  </>
                 )}
 
-                <div className="flex justify-between">
-                  {currentStep > 1 && (
-                    <button
-                      type="button"
-                      onClick={handleBack}
-                      className="bg-white/5 text-white font-semibold px-8 py-4 rounded-lg hover:bg-white/10 transition-colors duration-300"
+                <div className="flex justify-between items-center">
+                  <button
+                    type="button"
+                    onClick={handleBack}
+                    disabled={currentStep === 0}
+                    className={`p-4 rounded-full transition-all duration-300 ${
+                      currentStep === 0 
+                        ? 'opacity-50 cursor-not-allowed' 
+                        : 'hover:bg-white/10'
+                    }`}
+                  >
+                    <svg 
+                      className="w-6 h-6 text-white" 
+                      fill="none" 
+                      stroke="currentColor" 
+                      viewBox="0 0 24 24"
                     >
-                      Back
-                    </button>
-                  )}
+                      <path 
+                        strokeLinecap="round" 
+                        strokeLinejoin="round" 
+                        strokeWidth={2} 
+                        d="M15 19l-7-7 7-7" 
+                      />
+                    </svg>
+                  </button>
+
+                  <div className="flex items-center gap-2">
+                    {[1, 2, 3, 4, 5].map((step) => (
+                      <div
+                        key={step}
+                        className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                          currentStep === step 
+                            ? 'bg-[#bf0414] w-4' 
+                            : 'bg-white/30'
+                        }`}
+                      />
+                    ))}
+                  </div>
+
                   <button
                     type="button"
                     onClick={handleNext}
                     disabled={isSubmitting}
-                    className={`ml-auto bg-[#bf0414] text-white font-semibold px-8 py-4 rounded-lg transition-colors duration-300 ${
-                      isSubmitting ? 'opacity-50 cursor-not-allowed' : 'hover:bg-[#950505]'
+                    className={`p-4 rounded-full transition-all duration-300 ${
+                      isSubmitting 
+                        ? 'opacity-50 cursor-not-allowed' 
+                        : 'hover:bg-white/10'
                     }`}
                   >
-                    {isSubmitting ? 'Submitting...' : currentStep === 1 ? 'Next' : 'Submit Application'}
+                    <svg 
+                      className="w-6 h-6 text-white" 
+                      fill="none" 
+                      stroke="currentColor" 
+                      viewBox="0 0 24 24"
+                    >
+                      <path 
+                        strokeLinecap="round" 
+                        strokeLinejoin="round" 
+                        strokeWidth={2} 
+                        d="M9 5l7 7-7 7" 
+                      />
+                    </svg>
                   </button>
                 </div>
               </div>
@@ -500,7 +624,7 @@ export default function ApplyPage() {
         )}
       </div>
 
-      {currentStep !== 3 && <FAQAccordion />}
+      {currentStep !== 6 && currentStep !== 0 && <FAQAccordion />}
     </main>
   );
 }
