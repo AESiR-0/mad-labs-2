@@ -12,7 +12,7 @@ interface Particle {
 }
 
 export default function PageTransition({ children }: { children: React.ReactNode }) {
-  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(true);
   const [particles, setParticles] = useState<Particle[]>([]);
   const pathname = usePathname();
 
@@ -29,12 +29,15 @@ export default function PageTransition({ children }: { children: React.ReactNode
   }, []);
 
   useEffect(() => {
+    // Start transition immediately when pathname changes
     setIsTransitioning(true);
-    const timer = setTimeout(() => {
+    
+    // Keep content hidden during transition
+    const contentTimer = setTimeout(() => {
       setIsTransitioning(false);
     }, 800);
 
-    return () => clearTimeout(timer);
+    return () => clearTimeout(contentTimer);
   }, [pathname]);
 
   return (
@@ -63,8 +66,13 @@ export default function PageTransition({ children }: { children: React.ReactNode
         </div>
       </div>
 
-      {/* Content */}
-      <div className={`transition-opacity duration-800 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>
+      {/* Content - Hidden during transition */}
+      <div 
+        className={`transition-opacity duration-800 ${
+          isTransitioning ? 'opacity-0' : 'opacity-100'
+        }`}
+        style={{ visibility: isTransitioning ? 'hidden' : 'visible' }}
+      >
         {children}
       </div>
 

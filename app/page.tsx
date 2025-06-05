@@ -11,6 +11,8 @@ import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import Testimonials from '@/components/Testimonials';
 import FAQs from '@/components/FAQs';
+import FoundersNote from "@/components/FoundersNote";
+
 export default function Home() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [hasScrolled, setHasScrolled] = useState(false);
@@ -69,6 +71,7 @@ export default function Home() {
       <LaunchBlock />
       <FAQs />
       <CommunityCall />
+      <FoundersNote />
       <Footer />
 
       {/* Floating WhatsApp Button */}

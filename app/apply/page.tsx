@@ -119,6 +119,45 @@ function FAQAccordion() {
   );
 }
 
+function ThankYouScreen() {
+  return (
+    <div className="flex flex-col items-center gap-8 text-center">
+      <div className="w-20 h-20 rounded-full bg-[#bf0414]/20 flex items-center justify-center mb-4">
+        <svg className="w-10 h-10 text-[#bf0414]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+        </svg>
+      </div>
+      <h2 className="text-3xl font-black text-white tracking-tight">Application Received!</h2>
+      <p className="text-lg text-white/80 max-w-md">
+        We're excited to review your application. You'll hear from us within 48 hours with next steps.
+      </p>
+      <div className="mt-8 p-6 bg-white/5 border border-white/10 rounded-xl">
+        <h3 className="text-xl font-bold text-white mb-4">What's Next?</h3>
+        <ul className="text-left space-y-4 text-white/80">
+          <li className="flex items-start gap-3">
+            <span className="text-[#bf0414] mt-1">1.</span>
+            <span>We'll review your application and get back to you within 48 hours</span>
+          </li>
+          <li className="flex items-start gap-3">
+            <span className="text-[#bf0414] mt-1">2.</span>
+            <span>If selected, we'll schedule a quick chat to learn more about you</span>
+          </li>
+          <li className="flex items-start gap-3">
+            <span className="text-[#bf0414] mt-1">3.</span>
+            <span>Final selection and onboarding will happen in early June</span>
+          </li>
+        </ul>
+      </div>
+      <a 
+        href="/"
+        className="mt-8 px-8 py-4 bg-[#bf0414] text-white font-medium rounded-none hover:bg-[#950505] transition-colors"
+      >
+        Return Home
+      </a>
+    </div>
+  );
+}
+
 export default function ApplyPage() {
   const [step, setStep] = useState(0);
   const [role, setRole] = useState<"kid" | "parent" | null>(null);
@@ -131,6 +170,7 @@ export default function ApplyPage() {
   const [errors, setErrors] = useState<any>({});
   const [fieldFocus, setFieldFocus] = useState<string | null>(null);
   const [roleClicked, setRoleClicked] = useState<string | null>(null);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   // GSAP refs
   const stepRef = useRef<HTMLDivElement>(null);
@@ -193,8 +233,7 @@ export default function ApplyPage() {
       if (step === 3) {
         const res = kidCuriousSchema.safeParse(kidCurious);
         if (!res.success) return setErrors(res.error.flatten().fieldErrors);
-        // Submit logic here
-        alert("Submitted! (Kid)");
+        setIsSubmitted(true);
         return;
       }
       setStep(step + 1);
@@ -210,8 +249,7 @@ export default function ApplyPage() {
       if (step === 3) {
         const res = parentKidSchema.safeParse(parentKid);
         if (!res.success) return setErrors(res.error.flatten().fieldErrors);
-        // Submit logic here
-        alert("Submitted! (Parent)");
+        setIsSubmitted(true);
         return;
       }
       setStep(step + 1);
@@ -244,301 +282,307 @@ export default function ApplyPage() {
       {/* Overlay for readability */}
       <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-10 pointer-events-none" />
       <div className="w-full max-w-2xl bg-white/10 border border-white/10 rounded-2xl p-12 shadow-2xl relative z-20 backdrop-blur-md bg-clip-padding transition-all duration-500 hover:shadow-3xl flex flex-col gap-8">
-        {/* Progress Bar */}
-        {role && (
-          <div className="w-full mb-4">
-            <div className="flex justify-between items-center mb-2">
-              <span className="text-white/70 text-sm">Step {step + 1} of {totalSteps + 1}</span>
-              <span className="text-white/70 text-sm font-mono">{Math.round(progress)}%</span>
+        {isSubmitted ? (
+          <ThankYouScreen />
+        ) : (
+          <>
+            {/* Progress Bar */}
+            {role && (
+              <div className="w-full mb-4">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-white/70 text-sm">Step {step + 1} of {totalSteps + 1}</span>
+                  <span className="text-white/70 text-sm font-mono">{Math.round(progress)}%</span>
+                </div>
+                <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
+                  <div className="h-2 bg-[#bf0414] rounded-full transition-all duration-500" style={{ width: `${progress}%` }} />
+                </div>
+              </div>
+            )}
+            <div ref={stepRef}>
+            {step === 0 && (
+              <div className="flex flex-col items-center gap-12">
+                <h1 className="text-3xl font-black text-white mb-4 text-center tracking-tight">Please select the appropriate</h1>
+                <div className="flex gap-8 w-full justify-center">
+                  {(["kid", "parent"] as const).map((r, i) => (
+                    <button
+                      key={r}
+                      ref={el => { roleBtnRefs.current[i] = el; }}
+                      className={`flex-1 flex flex-col items-center justify-center gap-4 bg-white/10 border border-white/20 rounded-xl p-10 transition-colors duration-300 text-white text-xl font-semibold shadow-lg hover:shadow-xl ${roleClicked === r ? "ring-4 ring-[#bf0414]/40" : ""}`}
+                      onClick={() => handleRole(r)}
+                      style={{
+                        transform: roleClicked === r ? "scale(1.1)" : undefined,
+                        zIndex: roleClicked === r ? 2 : 1,
+                      }}
+                      disabled={!!roleClicked}
+                    >
+                      <span className="text-5xl">{r === "kid" ? "🧒" : "👨‍👩‍👧‍👦"}</span>
+                      <span>{r.charAt(0).toUpperCase() + r.slice(1)}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+            {/* KID FLOW */}
+            {role === "kid" && step === 1 && (
+              <div className="flex flex-col gap-10">
+                <div ref={el => { fieldRefs.current[0] = el; }} className="flex flex-col gap-2">
+                  <label className="text-lg text-white font-semibold mb-1">What's your name?</label>
+                  <input
+                    className={`p-4 rounded-lg bg-white/10 text-white border border-white/20 focus:outline-none transition-all duration-300 text-lg ${fieldFocus === "kidName" ? "ring-2 ring-[#bf0414]/60 scale-105" : ""}`}
+                    placeholder="Your name"
+                    value={kidInfo.name}
+                    onChange={e => setKidInfo({ ...kidInfo, name: e.target.value })}
+                    {...focusProps("kidName")}
+                  />
+                  {errors.name && <span className="text-[#bf0414] text-base animate-fade-in mt-1">{errors.name}</span>}
+                </div>
+                <div ref={el => { fieldRefs.current[1] = el; }} className="flex flex-col gap-2">
+                  <label className="text-lg text-white font-semibold mb-1">How old are you?</label>
+                  <input
+                    className={`p-4 rounded-lg bg-white/10 text-white border border-white/20 focus:outline-none transition-all duration-300 text-lg ${fieldFocus === "kidAge" ? "ring-2 ring-[#bf0414]/60 scale-105" : ""}`}
+                    placeholder="Your age"
+                    value={kidInfo.age}
+                    onChange={e => setKidInfo({ ...kidInfo, age: e.target.value })}
+                    {...focusProps("kidAge")}
+                  />
+                  {errors.age && <span className="text-[#bf0414] text-base animate-fade-in mt-1">{errors.age}</span>}
+                </div>
+                <div className="flex gap-6 mt-8 justify-between">
+                  <button
+                    onClick={handleBack}
+                    aria-label="Back"
+                    className="w-12 h-12 flex items-center justify-center rounded-full border-2 border-[#bf0414]/40 bg-transparent transition-all duration-200 opacity-80 hover:opacity-100 hover:scale-125"
+                  >
+                    <svg className="w-6 h-6" fill="none" stroke="#bf0414" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
+                  </button>
+                  <button
+                    onClick={handleNext}
+                    aria-label="Next"
+                    className="w-12 h-12 flex items-center justify-center rounded-full border-2 border-[#bf0414]/40 bg-transparent transition-all duration-200 opacity-80 hover:opacity-100 hover:scale-125"
+                  >
+                    <svg className="w-6 h-6" fill="none" stroke="#bf0414" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+                  </button>
+                </div>
+              </div>
+            )}
+            {role === "kid" && step === 2 && (
+              <div className="flex flex-col gap-10">
+                <div ref={el => { fieldRefs.current[0] = el; }} className="flex flex-col gap-2">
+                  <label className="text-lg text-white font-semibold mb-1">How do we contact you?</label>
+                  <input
+                    className={`p-4 rounded-lg bg-white/10 text-white border border-white/20 focus:outline-none transition-all duration-300 text-lg ${fieldFocus === "kidEmail" ? "ring-2 ring-[#bf0414]/60 scale-105" : ""}`}
+                    placeholder="Email"
+                    value={kidContact.email}
+                    onChange={e => setKidContact({ ...kidContact, email: e.target.value })}
+                    {...focusProps("kidEmail")}
+                  />
+                  {errors.email && <span className="text-[#bf0414] text-base animate-fade-in mt-1">{errors.email}</span>}
+                  <input
+                    className={`p-4 rounded-lg bg-white/10 text-white border border-white/20 focus:outline-none transition-all duration-300 mt-2 text-lg ${fieldFocus === "kidPhone" ? "ring-2 ring-[#bf0414]/60 scale-105" : ""}`}
+                    placeholder="Phone"
+                    value={kidContact.phone}
+                    onChange={e => setKidContact({ ...kidContact, phone: e.target.value })}
+                    {...focusProps("kidPhone")}
+                  />
+                  {errors.phone && <span className="text-[#bf0414] text-base animate-fade-in mt-1">{errors.phone}</span>}
+                </div>
+                <div ref={el => { fieldRefs.current[1] = el; }} className="flex flex-col gap-2">
+                  <label className="text-lg text-white font-semibold mb-1">Where do you live?</label>
+                  <input
+                    className={`p-4 rounded-lg bg-white/10 text-white border border-white/20 focus:outline-none transition-all duration-300 text-lg ${fieldFocus === "kidCity" ? "ring-2 ring-[#bf0414]/60 scale-105" : ""}`}
+                    placeholder="City"
+                    value={kidContact.city}
+                    onChange={e => setKidContact({ ...kidContact, city: e.target.value })}
+                    {...focusProps("kidCity")}
+                  />
+                  {errors.city && <span className="text-[#bf0414] text-base animate-fade-in mt-1">{errors.city}</span>}
+                </div>
+                <div className="flex gap-6 mt-8 justify-between">
+                  <button
+                    onClick={handleBack}
+                    aria-label="Back"
+                    className="w-12 h-12 flex items-center justify-center rounded-full border-2 border-[#bf0414]/40 bg-transparent transition-all duration-200 opacity-80 hover:opacity-100 hover:scale-125"
+                  >
+                    <svg className="w-6 h-6" fill="none" stroke="#bf0414" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
+                  </button>
+                  <button
+                    onClick={handleNext}
+                    aria-label="Next"
+                    className="w-12 h-12 flex items-center justify-center rounded-full border-2 border-[#bf0414]/40 bg-transparent transition-all duration-200 opacity-80 hover:opacity-100 hover:scale-125"
+                  >
+                    <svg className="w-6 h-6" fill="none" stroke="#bf0414" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+                  </button>
+                </div>
+              </div>
+            )}
+            {role === "kid" && step === 3 && (
+              <div className="flex flex-col gap-10">
+                <div ref={el => { fieldRefs.current[0] = el; }} className="flex flex-col gap-2">
+                  <label className="text-lg text-white font-semibold mb-1">What are you most curious about?</label>
+                  <textarea
+                    className={`p-4 rounded-lg bg-white/10 text-white border border-white/20 focus:outline-none min-h-[80px] transition-all duration-300 text-lg ${fieldFocus === "kidCurious" ? "ring-2 ring-[#bf0414]/60 scale-105" : ""}`}
+                    placeholder="I'm curious about..."
+                    value={kidCurious.curious}
+                    onChange={e => setKidCurious({ ...kidCurious, curious: e.target.value })}
+                    {...focusProps("kidCurious")}
+                  />
+                  {errors.curious && <span className="text-[#bf0414] text-base animate-fade-in mt-1">{errors.curious}</span>}
+                </div>
+                <div className="flex gap-6 mt-8 justify-between">
+                  <button
+                    onClick={handleBack}
+                    aria-label="Back"
+                    className="w-12 h-12 flex items-center justify-center rounded-full border-2 border-[#bf0414]/40 bg-transparent transition-all duration-200 opacity-80 hover:opacity-100 hover:scale-125"
+                  >
+                    <svg className="w-6 h-6" fill="none" stroke="#bf0414" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
+                  </button>
+                  <button
+                    onClick={handleNext}
+                    aria-label="Next"
+                    className="w-12 h-12 flex items-center justify-center rounded-full border-2 border-[#bf0414]/40 bg-transparent transition-all duration-200 opacity-80 hover:opacity-100 hover:scale-125"
+                  >
+                    <svg className="w-6 h-6" fill="none" stroke="#bf0414" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+                  </button>
+                </div>
+              </div>
+            )}
+            {/* PARENT FLOW */}
+            {role === "parent" && step === 1 && (
+              <div className="flex flex-col gap-10">
+                <div ref={el => { fieldRefs.current[0] = el; }} className="flex flex-col gap-2">
+                  <label className="text-lg text-white font-semibold mb-1">Your name</label>
+                  <input
+                    className={`p-4 rounded-lg bg-white/10 text-white border border-white/20 focus:outline-none transition-all duration-300 text-lg ${fieldFocus === "parentName" ? "ring-2 ring-[#bf0414]/60 scale-105" : ""}`}
+                    placeholder="Your name"
+                    value={parentInfo.name}
+                    onChange={e => setParentInfo({ ...parentInfo, name: e.target.value })}
+                    {...focusProps("parentName")}
+                  />
+                  {errors.name && <span className="text-[#bf0414] text-base animate-fade-in mt-1">{errors.name}</span>}
+                </div>
+                <div className="flex gap-6 mt-8 justify-between">
+                  <button
+                    onClick={handleBack}
+                    aria-label="Back"
+                    className="w-12 h-12 flex items-center justify-center rounded-full border-2 border-[#bf0414]/40 bg-transparent transition-all duration-200 opacity-80 hover:opacity-100 hover:scale-125"
+                  >
+                    <svg className="w-6 h-6" fill="none" stroke="#bf0414" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
+                  </button>
+                  <button
+                    onClick={handleNext}
+                    aria-label="Next"
+                    className="w-12 h-12 flex items-center justify-center rounded-full border-2 border-[#bf0414]/40 bg-transparent transition-all duration-200 opacity-80 hover:opacity-100 hover:scale-125"
+                  >
+                    <svg className="w-6 h-6" fill="none" stroke="#bf0414" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+                  </button>
+                </div>
+              </div>
+            )}
+            {role === "parent" && step === 2 && (
+              <div className="flex flex-col gap-10">
+                <div ref={el => { fieldRefs.current[0] = el; }} className="flex flex-col gap-2">
+                  <label className="text-lg text-white font-semibold mb-1">Your contact</label>
+                  <input
+                    className={`p-4 rounded-lg bg-white/10 text-white border border-white/20 focus:outline-none transition-all duration-300 text-lg ${fieldFocus === "parentEmail" ? "ring-2 ring-[#bf0414]/60 scale-105" : ""}`}
+                    placeholder="Email"
+                    value={parentContact.email}
+                    onChange={e => setParentContact({ ...parentContact, email: e.target.value })}
+                    {...focusProps("parentEmail")}
+                  />
+                  {errors.email && <span className="text-[#bf0414] text-base animate-fade-in mt-1">{errors.email}</span>}
+                  <input
+                    className={`p-4 rounded-lg bg-white/10 text-white border border-white/20 focus:outline-none transition-all duration-300 mt-2 text-lg ${fieldFocus === "parentPhone" ? "ring-2 ring-[#bf0414]/60 scale-105" : ""}`}
+                    placeholder="Phone"
+                    value={parentContact.phone}
+                    onChange={e => setParentContact({ ...parentContact, phone: e.target.value })}
+                    {...focusProps("parentPhone")}
+                  />
+                  {errors.phone && <span className="text-[#bf0414] text-base animate-fade-in mt-1">{errors.phone}</span>}
+                </div>
+                <div ref={el => { fieldRefs.current[1] = el; }} className="flex flex-col gap-2">
+                  <label className="text-lg text-white font-semibold mb-1">Your city</label>
+                  <input
+                    className={`p-4 rounded-lg bg-white/10 text-white border border-white/20 focus:outline-none transition-all duration-300 text-lg ${fieldFocus === "parentCity" ? "ring-2 ring-[#bf0414]/60 scale-105" : ""}`}
+                    placeholder="City"
+                    value={parentContact.city}
+                    onChange={e => setParentContact({ ...parentContact, city: e.target.value })}
+                    {...focusProps("parentCity")}
+                  />
+                  {errors.city && <span className="text-[#bf0414] text-base animate-fade-in mt-1">{errors.city}</span>}
+                </div>
+                <div className="flex gap-6 mt-8 justify-between">
+                  <button
+                    onClick={handleBack}
+                    aria-label="Back"
+                    className="w-12 h-12 flex items-center justify-center rounded-full border-2 border-[#bf0414]/40 bg-transparent transition-all duration-200 opacity-80 hover:opacity-100 hover:scale-125"
+                  >
+                    <svg className="w-6 h-6" fill="none" stroke="#bf0414" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
+                  </button>
+                  <button
+                    onClick={handleNext}
+                    aria-label="Next"
+                    className="w-12 h-12 flex items-center justify-center rounded-full border-2 border-[#bf0414]/40 bg-transparent transition-all duration-200 opacity-80 hover:opacity-100 hover:scale-125"
+                  >
+                    <svg className="w-6 h-6" fill="none" stroke="#bf0414" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+                  </button>
+                </div>
+              </div>
+            )}
+            {role === "parent" && step === 3 && (
+              <div className="flex flex-col gap-10">
+                <div ref={el => { fieldRefs.current[0] = el; }} className="flex flex-col gap-2">
+                  <label className="text-lg text-white font-semibold mb-1">Your kid's name & age</label>
+                  <input
+                    className={`p-4 rounded-lg bg-white/10 text-white border border-white/20 focus:outline-none transition-all duration-300 text-lg ${fieldFocus === "parentKidName" ? "ring-2 ring-[#bf0414]/60 scale-105" : ""}`}
+                    placeholder="Kid's name"
+                    value={parentKid.kidName}
+                    onChange={e => setParentKid({ ...parentKid, kidName: e.target.value })}
+                    {...focusProps("parentKidName")}
+                  />
+                  {errors.kidName && <span className="text-[#bf0414] text-base animate-fade-in mt-1">{errors.kidName}</span>}
+                  <input
+                    className={`p-4 rounded-lg bg-white/10 text-white border border-white/20 focus:outline-none transition-all duration-300 mt-2 text-lg ${fieldFocus === "parentKidAge" ? "ring-2 ring-[#bf0414]/60 scale-105" : ""}`}
+                    placeholder="Kid's age"
+                    value={parentKid.kidAge}
+                    onChange={e => setParentKid({ ...parentKid, kidAge: e.target.value })}
+                    {...focusProps("parentKidAge")}
+                  />
+                  {errors.kidAge && <span className="text-[#bf0414] text-base animate-fade-in mt-1">{errors.kidAge}</span>}
+                </div>
+                <div ref={el => { fieldRefs.current[1] = el; }} className="flex flex-col gap-2">
+                  <label className="text-lg text-white font-semibold mb-1">What do you think your child is deeply curious about?</label>
+                  <textarea
+                    className={`p-4 rounded-lg bg-white/10 text-white border border-white/20 focus:outline-none min-h-[80px] transition-all duration-300 text-lg ${fieldFocus === "parentCurious" ? "ring-2 ring-[#bf0414]/60 scale-105" : ""}`}
+                    placeholder="My child is curious about..."
+                    value={parentKid.curious}
+                    onChange={e => setParentKid({ ...parentKid, curious: e.target.value })}
+                    {...focusProps("parentCurious")}
+                  />
+                  {errors.curious && <span className="text-[#bf0414] text-base animate-fade-in mt-1">{errors.curious}</span>}
+                </div>
+                <div className="flex gap-6 mt-8 justify-between">
+                  <button
+                    onClick={handleBack}
+                    aria-label="Back"
+                    className="w-12 h-12 flex items-center justify-center rounded-full border-2 border-[#bf0414]/40 bg-transparent transition-all duration-200 opacity-80 hover:opacity-100 hover:scale-125"
+                  >
+                    <svg className="w-6 h-6" fill="none" stroke="#bf0414" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
+                  </button>
+                  <button
+                    onClick={handleNext}
+                    aria-label="Next"
+                    className="w-12 h-12 flex items-center justify-center rounded-full border-2 border-[#bf0414]/40 bg-transparent transition-all duration-200 opacity-80 hover:opacity-100 hover:scale-125"
+                  >
+                    <svg className="w-6 h-6" fill="none" stroke="#bf0414" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+                  </button>
+                </div>
+              </div>
+            )}
             </div>
-            <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
-              <div className="h-2 bg-[#bf0414] rounded-full transition-all duration-500" style={{ width: `${progress}%` }} />
-            </div>
-          </div>
+          </>
         )}
-        <div ref={stepRef}>
-        {step === 0 && (
-          <div className="flex flex-col items-center gap-12">
-            <h1 className="text-3xl font-black text-white mb-4 text-center tracking-tight">Please select the appropriate</h1>
-            <div className="flex gap-8 w-full justify-center">
-              {(["kid", "parent"] as const).map((r, i) => (
-                <button
-                  key={r}
-                  ref={el => { roleBtnRefs.current[i] = el; }}
-                  className={`flex-1 flex flex-col items-center justify-center gap-4 bg-white/10 border border-white/20 rounded-xl p-10 transition-colors duration-300 text-white text-xl font-semibold shadow-lg hover:shadow-xl ${roleClicked === r ? "ring-4 ring-[#bf0414]/40" : ""}`}
-                  onClick={() => handleRole(r)}
-                  style={{
-                    transform: roleClicked === r ? "scale(1.1)" : undefined,
-                    zIndex: roleClicked === r ? 2 : 1,
-                  }}
-                  disabled={!!roleClicked}
-                >
-                  <span className="text-5xl">{r === "kid" ? "🧒" : "👨‍👩‍👧‍👦"}</span>
-                  <span>{r.charAt(0).toUpperCase() + r.slice(1)}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-        {/* KID FLOW */}
-        {role === "kid" && step === 1 && (
-          <div className="flex flex-col gap-10">
-            <div ref={el => { fieldRefs.current[0] = el; }} className="flex flex-col gap-2">
-              <label className="text-lg text-white font-semibold mb-1">What's your name?</label>
-              <input
-                className={`p-4 rounded-lg bg-white/10 text-white border border-white/20 focus:outline-none transition-all duration-300 text-lg ${fieldFocus === "kidName" ? "ring-2 ring-[#bf0414]/60 scale-105" : ""}`}
-                placeholder="Your name"
-                value={kidInfo.name}
-                onChange={e => setKidInfo({ ...kidInfo, name: e.target.value })}
-                {...focusProps("kidName")}
-              />
-              {errors.name && <span className="text-[#bf0414] text-base animate-fade-in mt-1">{errors.name}</span>}
-            </div>
-            <div ref={el => { fieldRefs.current[1] = el; }} className="flex flex-col gap-2">
-              <label className="text-lg text-white font-semibold mb-1">How old are you?</label>
-              <input
-                className={`p-4 rounded-lg bg-white/10 text-white border border-white/20 focus:outline-none transition-all duration-300 text-lg ${fieldFocus === "kidAge" ? "ring-2 ring-[#bf0414]/60 scale-105" : ""}`}
-                placeholder="Your age"
-                value={kidInfo.age}
-                onChange={e => setKidInfo({ ...kidInfo, age: e.target.value })}
-                {...focusProps("kidAge")}
-              />
-              {errors.age && <span className="text-[#bf0414] text-base animate-fade-in mt-1">{errors.age}</span>}
-            </div>
-            <div className="flex gap-6 mt-8 justify-between">
-              <button
-                onClick={handleBack}
-                aria-label="Back"
-                className="w-12 h-12 flex items-center justify-center rounded-full border-2 border-[#bf0414]/40 bg-transparent transition-all duration-200 opacity-80 hover:opacity-100 hover:scale-125"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="#bf0414" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
-              </button>
-              <button
-                onClick={handleNext}
-                aria-label="Next"
-                className="w-12 h-12 flex items-center justify-center rounded-full border-2 border-[#bf0414]/40 bg-transparent transition-all duration-200 opacity-80 hover:opacity-100 hover:scale-125"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="#bf0414" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
-              </button>
-            </div>
-          </div>
-        )}
-        {role === "kid" && step === 2 && (
-          <div className="flex flex-col gap-10">
-            <div ref={el => { fieldRefs.current[0] = el; }} className="flex flex-col gap-2">
-              <label className="text-lg text-white font-semibold mb-1">How do we contact you?</label>
-              <input
-                className={`p-4 rounded-lg bg-white/10 text-white border border-white/20 focus:outline-none transition-all duration-300 text-lg ${fieldFocus === "kidEmail" ? "ring-2 ring-[#bf0414]/60 scale-105" : ""}`}
-                placeholder="Email"
-                value={kidContact.email}
-                onChange={e => setKidContact({ ...kidContact, email: e.target.value })}
-                {...focusProps("kidEmail")}
-              />
-              {errors.email && <span className="text-[#bf0414] text-base animate-fade-in mt-1">{errors.email}</span>}
-              <input
-                className={`p-4 rounded-lg bg-white/10 text-white border border-white/20 focus:outline-none transition-all duration-300 mt-2 text-lg ${fieldFocus === "kidPhone" ? "ring-2 ring-[#bf0414]/60 scale-105" : ""}`}
-                placeholder="Phone"
-                value={kidContact.phone}
-                onChange={e => setKidContact({ ...kidContact, phone: e.target.value })}
-                {...focusProps("kidPhone")}
-              />
-              {errors.phone && <span className="text-[#bf0414] text-base animate-fade-in mt-1">{errors.phone}</span>}
-            </div>
-            <div ref={el => { fieldRefs.current[1] = el; }} className="flex flex-col gap-2">
-              <label className="text-lg text-white font-semibold mb-1">Where do you live?</label>
-              <input
-                className={`p-4 rounded-lg bg-white/10 text-white border border-white/20 focus:outline-none transition-all duration-300 text-lg ${fieldFocus === "kidCity" ? "ring-2 ring-[#bf0414]/60 scale-105" : ""}`}
-                placeholder="City"
-                value={kidContact.city}
-                onChange={e => setKidContact({ ...kidContact, city: e.target.value })}
-                {...focusProps("kidCity")}
-              />
-              {errors.city && <span className="text-[#bf0414] text-base animate-fade-in mt-1">{errors.city}</span>}
-            </div>
-            <div className="flex gap-6 mt-8 justify-between">
-              <button
-                onClick={handleBack}
-                aria-label="Back"
-                className="w-12 h-12 flex items-center justify-center rounded-full border-2 border-[#bf0414]/40 bg-transparent transition-all duration-200 opacity-80 hover:opacity-100 hover:scale-125"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="#bf0414" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
-              </button>
-              <button
-                onClick={handleNext}
-                aria-label="Next"
-                className="w-12 h-12 flex items-center justify-center rounded-full border-2 border-[#bf0414]/40 bg-transparent transition-all duration-200 opacity-80 hover:opacity-100 hover:scale-125"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="#bf0414" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
-              </button>
-            </div>
-          </div>
-        )}
-        {role === "kid" && step === 3 && (
-          <div className="flex flex-col gap-10">
-            <div ref={el => { fieldRefs.current[0] = el; }} className="flex flex-col gap-2">
-              <label className="text-lg text-white font-semibold mb-1">What are you most curious about?</label>
-              <textarea
-                className={`p-4 rounded-lg bg-white/10 text-white border border-white/20 focus:outline-none min-h-[80px] transition-all duration-300 text-lg ${fieldFocus === "kidCurious" ? "ring-2 ring-[#bf0414]/60 scale-105" : ""}`}
-                placeholder="I'm curious about..."
-                value={kidCurious.curious}
-                onChange={e => setKidCurious({ ...kidCurious, curious: e.target.value })}
-                {...focusProps("kidCurious")}
-              />
-              {errors.curious && <span className="text-[#bf0414] text-base animate-fade-in mt-1">{errors.curious}</span>}
-            </div>
-            <div className="flex gap-6 mt-8 justify-between">
-              <button
-                onClick={handleBack}
-                aria-label="Back"
-                className="w-12 h-12 flex items-center justify-center rounded-full border-2 border-[#bf0414]/40 bg-transparent transition-all duration-200 opacity-80 hover:opacity-100 hover:scale-125"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="#bf0414" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
-              </button>
-              <button
-                onClick={handleNext}
-                aria-label="Next"
-                className="w-12 h-12 flex items-center justify-center rounded-full border-2 border-[#bf0414]/40 bg-transparent transition-all duration-200 opacity-80 hover:opacity-100 hover:scale-125"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="#bf0414" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
-              </button>
-            </div>
-          </div>
-        )}
-        {/* PARENT FLOW */}
-        {role === "parent" && step === 1 && (
-          <div className="flex flex-col gap-10">
-            <div ref={el => { fieldRefs.current[0] = el; }} className="flex flex-col gap-2">
-              <label className="text-lg text-white font-semibold mb-1">Your name</label>
-              <input
-                className={`p-4 rounded-lg bg-white/10 text-white border border-white/20 focus:outline-none transition-all duration-300 text-lg ${fieldFocus === "parentName" ? "ring-2 ring-[#bf0414]/60 scale-105" : ""}`}
-                placeholder="Your name"
-                value={parentInfo.name}
-                onChange={e => setParentInfo({ ...parentInfo, name: e.target.value })}
-                {...focusProps("parentName")}
-              />
-              {errors.name && <span className="text-[#bf0414] text-base animate-fade-in mt-1">{errors.name}</span>}
-            </div>
-            <div className="flex gap-6 mt-8 justify-between">
-              <button
-                onClick={handleBack}
-                aria-label="Back"
-                className="w-12 h-12 flex items-center justify-center rounded-full border-2 border-[#bf0414]/40 bg-transparent transition-all duration-200 opacity-80 hover:opacity-100 hover:scale-125"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="#bf0414" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
-              </button>
-              <button
-                onClick={handleNext}
-                aria-label="Next"
-                className="w-12 h-12 flex items-center justify-center rounded-full border-2 border-[#bf0414]/40 bg-transparent transition-all duration-200 opacity-80 hover:opacity-100 hover:scale-125"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="#bf0414" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
-              </button>
-            </div>
-          </div>
-        )}
-        {role === "parent" && step === 2 && (
-          <div className="flex flex-col gap-10">
-            <div ref={el => { fieldRefs.current[0] = el; }} className="flex flex-col gap-2">
-              <label className="text-lg text-white font-semibold mb-1">Your contact</label>
-              <input
-                className={`p-4 rounded-lg bg-white/10 text-white border border-white/20 focus:outline-none transition-all duration-300 text-lg ${fieldFocus === "parentEmail" ? "ring-2 ring-[#bf0414]/60 scale-105" : ""}`}
-                placeholder="Email"
-                value={parentContact.email}
-                onChange={e => setParentContact({ ...parentContact, email: e.target.value })}
-                {...focusProps("parentEmail")}
-              />
-              {errors.email && <span className="text-[#bf0414] text-base animate-fade-in mt-1">{errors.email}</span>}
-              <input
-                className={`p-4 rounded-lg bg-white/10 text-white border border-white/20 focus:outline-none transition-all duration-300 mt-2 text-lg ${fieldFocus === "parentPhone" ? "ring-2 ring-[#bf0414]/60 scale-105" : ""}`}
-                placeholder="Phone"
-                value={parentContact.phone}
-                onChange={e => setParentContact({ ...parentContact, phone: e.target.value })}
-                {...focusProps("parentPhone")}
-              />
-              {errors.phone && <span className="text-[#bf0414] text-base animate-fade-in mt-1">{errors.phone}</span>}
-            </div>
-            <div ref={el => { fieldRefs.current[1] = el; }} className="flex flex-col gap-2">
-              <label className="text-lg text-white font-semibold mb-1">Your city</label>
-              <input
-                className={`p-4 rounded-lg bg-white/10 text-white border border-white/20 focus:outline-none transition-all duration-300 text-lg ${fieldFocus === "parentCity" ? "ring-2 ring-[#bf0414]/60 scale-105" : ""}`}
-                placeholder="City"
-                value={parentContact.city}
-                onChange={e => setParentContact({ ...parentContact, city: e.target.value })}
-                {...focusProps("parentCity")}
-              />
-              {errors.city && <span className="text-[#bf0414] text-base animate-fade-in mt-1">{errors.city}</span>}
-            </div>
-            <div className="flex gap-6 mt-8 justify-between">
-              <button
-                onClick={handleBack}
-                aria-label="Back"
-                className="w-12 h-12 flex items-center justify-center rounded-full border-2 border-[#bf0414]/40 bg-transparent transition-all duration-200 opacity-80 hover:opacity-100 hover:scale-125"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="#bf0414" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
-              </button>
-              <button
-                onClick={handleNext}
-                aria-label="Next"
-                className="w-12 h-12 flex items-center justify-center rounded-full border-2 border-[#bf0414]/40 bg-transparent transition-all duration-200 opacity-80 hover:opacity-100 hover:scale-125"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="#bf0414" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
-              </button>
-            </div>
-          </div>
-        )}
-        {role === "parent" && step === 3 && (
-          <div className="flex flex-col gap-10">
-            <div ref={el => { fieldRefs.current[0] = el; }} className="flex flex-col gap-2">
-              <label className="text-lg text-white font-semibold mb-1">Your kid's name & age</label>
-              <input
-                className={`p-4 rounded-lg bg-white/10 text-white border border-white/20 focus:outline-none transition-all duration-300 text-lg ${fieldFocus === "parentKidName" ? "ring-2 ring-[#bf0414]/60 scale-105" : ""}`}
-                placeholder="Kid's name"
-                value={parentKid.kidName}
-                onChange={e => setParentKid({ ...parentKid, kidName: e.target.value })}
-                {...focusProps("parentKidName")}
-              />
-              {errors.kidName && <span className="text-[#bf0414] text-base animate-fade-in mt-1">{errors.kidName}</span>}
-              <input
-                className={`p-4 rounded-lg bg-white/10 text-white border border-white/20 focus:outline-none transition-all duration-300 mt-2 text-lg ${fieldFocus === "parentKidAge" ? "ring-2 ring-[#bf0414]/60 scale-105" : ""}`}
-                placeholder="Kid's age"
-                value={parentKid.kidAge}
-                onChange={e => setParentKid({ ...parentKid, kidAge: e.target.value })}
-                {...focusProps("parentKidAge")}
-              />
-              {errors.kidAge && <span className="text-[#bf0414] text-base animate-fade-in mt-1">{errors.kidAge}</span>}
-            </div>
-            <div ref={el => { fieldRefs.current[1] = el; }} className="flex flex-col gap-2">
-              <label className="text-lg text-white font-semibold mb-1">What do you think your child is deeply curious about?</label>
-              <textarea
-                className={`p-4 rounded-lg bg-white/10 text-white border border-white/20 focus:outline-none min-h-[80px] transition-all duration-300 text-lg ${fieldFocus === "parentCurious" ? "ring-2 ring-[#bf0414]/60 scale-105" : ""}`}
-                placeholder="My child is curious about..."
-                value={parentKid.curious}
-                onChange={e => setParentKid({ ...parentKid, curious: e.target.value })}
-                {...focusProps("parentCurious")}
-              />
-              {errors.curious && <span className="text-[#bf0414] text-base animate-fade-in mt-1">{errors.curious}</span>}
-            </div>
-            <div className="flex gap-6 mt-8 justify-between">
-              <button
-                onClick={handleBack}
-                aria-label="Back"
-                className="w-12 h-12 flex items-center justify-center rounded-full border-2 border-[#bf0414]/40 bg-transparent transition-all duration-200 opacity-80 hover:opacity-100 hover:scale-125"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="#bf0414" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
-              </button>
-              <button
-                onClick={handleNext}
-                aria-label="Next"
-                className="w-12 h-12 flex items-center justify-center rounded-full border-2 border-[#bf0414]/40 bg-transparent transition-all duration-200 opacity-80 hover:opacity-100 hover:scale-125"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="#bf0414" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
-              </button>
-            </div>
-          </div>
-        )}
-        </div>
       </div>
-      <FAQAccordion />
+      {!isSubmitted && <FAQAccordion />}
     </main>
   );
 }
