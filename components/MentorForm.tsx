@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { handleMentorForm } from "@/lib/googleSheets";
 
 export default function MentorForm() {
   const [formData, setFormData] = useState({
@@ -17,10 +18,45 @@ export default function MentorForm() {
     additional: ""
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<{
+    type: 'success' | 'error' | null;
+    message: string;
+  }>({ type: null, message: '' });
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission
-    console.log(formData);
+    setIsSubmitting(true);
+    setSubmitStatus({ type: null, message: '' });
+
+    try {
+      await handleMentorForm(formData);
+      setSubmitStatus({
+        type: 'success',
+        message: 'Application submitted successfully! We\'ll be in touch soon.'
+      });
+      // Reset form
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        city: "",
+        work: "",
+        links: "",
+        whyMentor: "",
+        helpStyle: "",
+        madFit: "",
+        availability: "",
+        additional: ""
+      });
+    } catch (error) {
+      setSubmitStatus({
+        type: 'error',
+        message: 'Failed to submit application. Please try again.'
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -36,6 +72,14 @@ export default function MentorForm() {
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-3xl font-black text-center mb-12 text-white">Apply to be a Mentor</h2>
         
+        {submitStatus.type && (
+          <div className={`mb-8 p-4 rounded-lg ${
+            submitStatus.type === 'success' ? 'bg-green-500/20 text-green-200' : 'bg-red-500/20 text-red-200'
+          }`}>
+            {submitStatus.message}
+          </div>
+        )}
+
         <form onSubmit={handleSubmit} className="space-y-12">
           {/* Basic Info Section */}
           <div className="space-y-6">
@@ -202,9 +246,12 @@ export default function MentorForm() {
 
           <button
             type="submit"
-            className="w-full bg-[#bf0414] text-white font-semibold px-8 py-4 rounded-lg hover:bg-[#950505] transition-colors duration-300"
+            disabled={isSubmitting}
+            className={`w-full bg-[#bf0414] text-white font-semibold px-8 py-4 rounded-lg transition-colors duration-300 ${
+              isSubmitting ? 'opacity-50 cursor-not-allowed' : 'hover:bg-[#950505]'
+            }`}
           >
-            Submit Application
+            {isSubmitting ? 'Submitting...' : 'Submit Application'}
           </button>
         </form>
       </div>
