@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Footer() {
   return (
     <footer className="py-5  bg-black text-center text-lg text-[#f2f2f2] ">
@@ -9,14 +11,14 @@ export default function Footer() {
                 Been that <span className="text-[#bf0414]">kid</span>?
               </h3>
 
-              <a
+              <Link
                 href="/mentor-apply"
                 className="bg-transparent border-2 border-[#bf0414] hover:bg-[#bf0414]/10 text-[#f2f2f2] font-semibold px-8 sm:px-10 py-4 sm:py-5 rounded-none transition-all duration-300 text-lg sm:text-xl group relative overflow-hidden inline-block"
               >
                 <span className="relative z-10">Apply to be a mentor</span>
                 <div className="absolute inset-0 bg-[#bf0414] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
                 <div className="absolute inset-0 border-2 border-[#bf0414] transform -translate-x-full group-hover:translate-x-0 transition-transform duration-300"></div>
-              </a>
+              </Link>
             </div>
           </div>
         </div>

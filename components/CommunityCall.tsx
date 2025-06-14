@@ -3,6 +3,7 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import Link from 'next/link';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -67,7 +68,7 @@ export default function CommunityCall() {
                   <p className="text-[#f2f2f2]/60 text-sm">
                     Connect with builders, share ideas, and get real-time updates in our community.
                   </p>
-                  <a 
+                  <Link
                     href="#" 
                     className="inline-flex items-center space-x-2 text-[#5865F2] hover:text-[#4752C4] transition-colors duration-300 text-sm font-medium"
                   >
@@ -75,7 +76,7 @@ export default function CommunityCall() {
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -94,7 +95,7 @@ export default function CommunityCall() {
                   <p className="text-[#f2f2f2]/60 text-sm">
                     Stay updated with our latest announcements and community highlights.
                   </p>
-                  <a 
+                  <Link
                     href="#" 
                     className="inline-flex items-center space-x-2 text-[#1DA1F2] hover:text-[#1a8cd8] transition-colors duration-300 text-sm font-medium"
                   >
@@ -102,7 +103,7 @@ export default function CommunityCall() {
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -121,7 +122,7 @@ export default function CommunityCall() {
                   <p className="text-[#f2f2f2]/60 text-sm">
                     Get exclusive content, event updates, and community stories delivered to your inbox.
                   </p>
-                  <a 
+                  <Link
                     href="#" 
                     className="inline-flex items-center space-x-2 text-[#bf0414] hover:text-[#950505] transition-colors duration-300 text-sm font-medium"
                   >
@@ -129,7 +130,7 @@ export default function CommunityCall() {
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>

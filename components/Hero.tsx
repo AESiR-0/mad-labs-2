@@ -42,7 +42,7 @@ export default function Hero() {
     <section className="relative h-screen overflow-hidden" ref={heroRef}>
       {/* Background Video */}
       <video
-        src="/animation_video/starry_bg.mp4"
+        src="https://res.cloudinary.com/dyk0ckibz/video/upload/v1749464099/i12swylpftmpbqaiy3os.webm"
         autoPlay
         loop
         muted
@@ -52,7 +52,7 @@ export default function Hero() {
       {/* Centered Animation Video */}
       <div className="absolute inset-0 flex items-center justify-center">
         <video
-          src="/animation_video/reverse_green.mp4"
+          src="https://res.cloudinary.com/dyk0ckibz/video/upload/v1749464087/he8ie8fh9khnlc0hqpdt.webm"
           autoPlay
           loop
           muted
@@ -81,6 +81,10 @@ export default function Hero() {
         </h1>
         <p className="text-lg md:text-xl uppercase tracking-[0.2em] text-[#f2f2f2] font-light text-center">For kids who break, & build.</p>
       </div>
+
+      {/* Gradient Divider
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#121212] via-[#121212]/80 to-transparent z-10" />
+      <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-[#bf0414]/10 via-transparent to-transparent z-10" /> */}
 
       {/* Dialog Box
       <div className="absolute inset-0 flex items-center ml-40 justify-center z-[9999] pointer-events-none">

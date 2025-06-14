@@ -150,7 +150,7 @@ export default function LaunchBlock() {
                   >
                     Find out more
                   </Link>
-                  <a 
+                  <Link 
                     href="https://calendly.com/your-link" 
                     target="_blank" 
                     rel="noopener noreferrer"
@@ -158,7 +158,7 @@ export default function LaunchBlock() {
                     style={{ transition: 'none' }}
                   >
                     Talk to us
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>

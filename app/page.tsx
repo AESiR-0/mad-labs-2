@@ -75,7 +75,7 @@ export default function Home() {
       <Footer />
 
       {/* Floating WhatsApp Button */}
-      <a 
+      <Link
         href="https://wa.me/919925978977" 
         target="_blank" 
         rel="noopener noreferrer"
@@ -95,7 +95,7 @@ export default function Home() {
         <span className="opacity-0 w-0 group-hover:opacity-100 group-hover:w-auto transition-all duration-300 whitespace-nowrap overflow-hidden font-medium">
           Talk to us
         </span>
-      </a>
+      </Link>
     </main>
   );
 }

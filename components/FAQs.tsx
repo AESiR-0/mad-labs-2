@@ -46,27 +46,46 @@ export default function FAQs() {
     }
   ];
   const [open, setOpen] = useState<number | null>(null);
+  const [hover, setHover] = useState<number | null>(null);
   const [heights, setHeights] = useState<number[]>([]);
   const contentRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const updateHeights = () => {
       const newHeights = contentRefs.current.map(ref => {
         if (!ref) return 0;
-        // Get the actual content height plus padding
         const height = ref.scrollHeight;
         return height;
       });
       setHeights(newHeights);
     };
 
-    // Initial height calculation
     updateHeights();
-
-    // Update heights on window resize
     window.addEventListener('resize', updateHeights);
     return () => window.removeEventListener('resize', updateHeights);
   }, []);
+
+  const handleMouseEnter = (index: number) => {
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+    }
+    setHover(index);
+  };
+
+  const handleMouseLeave = () => {
+    hoverTimeoutRef.current = setTimeout(() => {
+      setHover(null);
+    }, 100); // Small delay to prevent flickering
+  };
+
+  const handleClick = (index: number) => {
+    if (open === index) {
+      setOpen(null);
+    } else {
+      setOpen(index);
+    }
+  };
 
   return (
     <section className="w-full bg-gradient-to-b to-[#111111] from-black mx-auto mt-24 pb-20">
@@ -75,27 +94,45 @@ export default function FAQs() {
         <div className="flex flex-col gap-4 sm:gap-6">
           {faqs.map((faq, i) => {
             const isOpen = open === i;
+            const isHovered = hover === i;
+            const isActive = isOpen || isHovered;
+            
             return (
               <div
                 key={i}
                 className={`rounded-lg cursor-pointer w-full overflow-hidden
-                  ${isOpen
+                  ${isActive
                     ? "bg-[#bf0414] text-white border-2 border-[#bf0414]"
                     : "bg-transparent border-2 border-[#bf0414] text-[#bf0414] hover:bg-[#bf0414]/10"}
                   px-4 sm:px-8 sm:py-6`}
-                onClick={() => setOpen(isOpen ? null : i)}
+                onClick={() => handleClick(i)}
+                onMouseEnter={() => handleMouseEnter(i)}
+                onMouseLeave={handleMouseLeave}
                 style={{ fontFamily: "inherit" }}
               >
                 <div className="text-base sm:text-lg font-bold flex items-center justify-between"> 
                   <span className="pr-4">{faq.q}</span>
-                  <span className={`flex-shrink-0 text-base sm:text-lg font-bold transition-transform duration-300 ${isOpen ? 'rotate-90' : ''}`}>▶</span>
+                  <svg 
+                    className={`w-5 h-5 transition-transform duration-300 ${isActive ? 'rotate-90' : ''}`}
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path 
+                      d="M9 18L15 12L9 6" 
+                      stroke="currentColor" 
+                      strokeWidth="2" 
+                      strokeLinecap="round" 
+                      strokeLinejoin="round"
+                    />
+                  </svg>
                 </div>
                 <div 
-                  className=" transition-all duration-300 ease-in-out"
+                  className="transition-all duration-300 ease-in-out"
                   style={{ 
-                    height: isOpen ? `auto` : '0px',
-                    opacity: isOpen ? 1 : 0,
-                    visibility: isOpen ? 'visible' : 'hidden'
+                    height: isActive ? `auto` : '0px',
+                    opacity: isActive ? 1 : 0,
+                    visibility: isActive ? 'visible' : 'hidden'
                   }}
                 >
                   <div 

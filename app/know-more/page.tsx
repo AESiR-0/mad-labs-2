@@ -1,9 +1,23 @@
 "use client";
 
+import Link from "next/link";
+
 export default function KnowMorePage() {
   return (
     <main className="min-h-screen flex flex-col items-center justify-center bg-[#010101] px-4 py-12">
-      <div className="w-full max-w-2xl bg-white/10 border border-white/10 rounded-2xl p-10 shadow-2xl backdrop-blur-md">
+      <div className="w-full max-w-2xl bg-white/10 border border-white/10 rounded-2xl p-10 shadow-2xl backdrop-blur-md relative">
+        {/* Close Button */}
+        <div className="absolute top-4 right-4">
+          <Link 
+            href="/"
+            className="inline-flex items-center justify-center w-10 h-10 rounded-full hover:bg-white/10 transition-colors duration-300"
+          >
+            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </Link>
+        </div>
+
         <h1 className="text-3xl font-black text-white mb-6">What happens at Cohort 1?</h1>
         <p className="text-lg text-white mb-4">
           The first Mad Labs cohort is a <b>15-day sprint</b><br />

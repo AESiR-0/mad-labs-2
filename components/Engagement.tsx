@@ -118,14 +118,13 @@ export default function Engagement() {
   return (
     <section className="min-h-[60vh] w-full flex flex-col justify-center items-center bg-[#121212] relative overflow-hidden">
       {/* Animated grid background */}
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(191,4,20,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(191,4,20,0.1)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
 
       <div className="container mx-auto max-w-[73rem]   lg:px-40 relative z-10">
         <div className="max-w-6xl mx-auto space-y-5 md:space-y-8">
           {/* Title */}
           <div className="text-center space-y-4">
             <h2 className="text-2xl md:text-[2.5rem] font-bold text-[#f2f2f2] leading-tight">
-              What would you build (or break) if nobody said no?
+              What would you build (or break) <br /> if nobody said no?
             </h2>
           </div>
 

@@ -5,6 +5,7 @@ import { z } from "zod";
 import gsap from "gsap";
 
 import FAQAccordion from '@/components/FAQs';
+import Link from "next/link";
 
 const roleSchema = z.enum(["kid", "parent"]);
 const kidInfoSchema = z.object({
@@ -80,12 +81,12 @@ function ThankYouScreen() {
           </li>
         </ul>
       </div>
-      <a 
+      <Link
         href="/"
         className="mt-8 px-8 py-4 bg-[#bf0414] text-white font-medium rounded-none hover:bg-[#950505] transition-colors"
       >
         Return Home
-      </a>
+      </Link>
     </div>
   );
 }
@@ -312,11 +313,23 @@ export default function ApplyPage() {
         muted
         playsInline
         className="fixed inset-0 w-full h-full object-cover z-0"
-        src="/animated_video/starry_bg.mp4"
+        src="https://res.cloudinary.com/dyk0ckibz/video/upload/v1749464099/i12swylpftmpbqaiy3os.webm"
       />
       {/* Overlay for readability */}
       <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-10 pointer-events-none" />
       <div className="w-full max-w-2xl bg-white/10 border border-white/10 rounded-2xl p-12 shadow-2xl relative z-20 backdrop-blur-md bg-clip-padding transition-all duration-500 hover:shadow-3xl flex flex-col gap-8">
+        {/* Close Button */}
+        <div className="absolute top-4 right-4">
+          <Link 
+            href="/"
+            className="inline-flex items-center justify-center w-10 h-10 rounded-full hover:bg-white/10 transition-colors duration-300"
+          >
+            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </Link>
+        </div>
+
         {currentStep === 6 ? (
           <ThankYouScreen />
         ) : currentStep === 0 ? (
