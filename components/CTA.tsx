@@ -61,9 +61,9 @@ export default function CTA() {
   };
 
   return (
-    <section ref={sectionRef} className="min-h-[80vh] sm:min-h-screen w-full flex flex-col justify-center items-center bg-black relative overflow-hidden py-16 sm:py-0">
+    <section ref={sectionRef} className="min-h-[80vh] sm:min-h-screen w-full flex flex-col justify-center items-center bg-[#0e0e0e] relative overflow-hidden py-16 sm:py-0">
       {/* Background Elements */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black via-[#0a0a0a] to-black"></div>
+      <div className="absolute inset-0 bg-gradient-to-b from-black via-[#0a0a0a] to-[#0e0e0e]"></div>
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-1/4 left-1/4 w-64 sm:w-96 h-64 sm:h-96 bg-[#bf0414]/5 rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute bottom-1/4 right-1/4 w-64 sm:w-96 h-64 sm:h-96 bg-[#bf0414]/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>

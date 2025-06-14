@@ -28,7 +28,7 @@ export default function Manifesto() {
   }, []);
 
   return (
-    <section className="min-h-screen w-full px-4 md:px-20 lg:px-40 py-12 md:py-20 flex flex-col justify-center bg-[#121212] relative" ref={manifestoRef}>
+    <section className="min-h-screen w-full px-4 md:px-10 lg:px-20 py-12 md:py-20 flex flex-col justify-center bg-[#121212] relative" ref={manifestoRef}>
       {/* Gradient Divider */}
       <div className="absolute opacity-80 top-0 left-0 right-0 h-32 bg-gradient-to-b from-[#0e0e0e] via-[#171717]/80 to-transparent z-10" />
       {/* <div className="absolute -top-5 left-0 right-0 h-16 bg-gradient-to-b from-[#bf0414]/10 via-transparent to-transparent z-10" /> */}

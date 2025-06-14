@@ -36,10 +36,10 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-black text-[#f2f2f2] relative">
+    <main className="min-h-screen bg-[#0e0e0e] text-[#f2f2f2] relative">
       {/* Navigation Bar */}
       <nav 
-        className={`fixed top-0 left-0 right-0 z-50 px-8 py-6 backdrop-blur-md bg-black/30 transition-all duration-500 ${
+        className={`fixed top-0 left-0 right-0 z-50 px-8 py-6 backdrop-blur-md bg-[#0e0e0e]/30 transition-all duration-500 ${
           hasScrolled 
             ? isScrolled 
               ? 'translate-y-0' 
@@ -70,7 +70,7 @@ export default function Home() {
       <Engagement />
       <LaunchBlock />
       <FAQs />
-      <CommunityCall />
+      {/* <CommunityCall /> */}
       <FoundersNote />
       <Footer />
 

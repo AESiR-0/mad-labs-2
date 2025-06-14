@@ -119,7 +119,7 @@ export default function Engagement() {
     <section className="min-h-[60vh] w-full flex flex-col justify-center items-center bg-[#121212] relative overflow-hidden">
       {/* Animated grid background */}
 
-      <div className="container mx-auto max-w-[73rem]   lg:px-40 relative z-10">
+      <div className="container mx-auto max-w-6xl relative z-10">
         <div className="max-w-6xl mx-auto space-y-5 md:space-y-8">
           {/* Title */}
           <div className="text-center space-y-4">

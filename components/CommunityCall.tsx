@@ -30,7 +30,7 @@ export default function CommunityCall() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="min-h-[80vh] sm:min-h-screen w-full flex flex-col justify-center items-center bg-black relative overflow-hidden py-16 sm:py-0">
+    <section ref={sectionRef} className="min-h-[80vh] sm:min-h-screen w-full flex flex-col justify-center items-center bg-[#0e0e0e] relative overflow-hidden py-16 sm:py-0">
       {/* Subtle gradient background */}
       <div className="absolute inset-0 bg-gradient-to-b to-[#0000] from-[#121212]"></div>
       

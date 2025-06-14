@@ -88,9 +88,19 @@ export default function FAQs() {
   };
 
   return (
-    <section className="w-full bg-gradient-to-b to-[#111111] from-black mx-auto mt-24 pb-20">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-2xl font-extrabold text-center mb-10 tracking-tight text-white">Frequently Asked Questions</h2>
+    <section className="w-full bg-gradient-to-b to-[#121212] from-[#0e0e0e] mx-auto  py-20">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl relative z-20">
+        <div className="mb-20">
+          <div className="flex items-center gap-4 mb-4">
+            <div className="h-[1px] w-12 bg-[#bf0414]" />
+            <span className="text-[#bf0414] text-sm font-medium tracking-wider">FREQUENTLY ASKED</span>
+            <div className="h-[1px] flex-1 bg-[#bf0414]" />
+          </div>
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-[1.1]">
+            Questions
+          </h2>
+        </div>
+
         <div className="flex flex-col gap-4 sm:gap-6">
           {faqs.map((faq, i) => {
             const isOpen = open === i;
