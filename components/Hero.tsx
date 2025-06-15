@@ -46,6 +46,7 @@ export default function Hero() {
         autoPlay
         loop
         muted
+        playsInline
         className="absolute inset-0 w-full h-full object-cover scale-100"
       />
 
@@ -56,6 +57,7 @@ export default function Hero() {
           autoPlay
           loop
           muted
+          playsInline
           className="w-full h-full object-cover mix-blend-lighten"
         />
       </div>
