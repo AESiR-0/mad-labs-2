@@ -4,7 +4,6 @@ import { useState, useRef, useEffect } from "react";
 import { z } from "zod";
 import gsap from "gsap";
 
-import FAQAccordion from '@/components/FAQs';
 import Link from "next/link";
 
 const roleSchema = z.enum(["kid", "parent"]);
@@ -637,7 +636,6 @@ export default function ApplyPage() {
         )}
       </div>
 
-      {currentStep !== 6 && currentStep !== 0 && <FAQAccordion />}
     </main>
   );
 }
