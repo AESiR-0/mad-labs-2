@@ -10,6 +10,14 @@ export default function Hero() {
   const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
+    // Check if device is iOS
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    
+    // Skip animations for iOS devices
+    if (isIOS) {
+      return;
+    }
+
     // Video animation
     gsap.from(heroRef.current, {
       duration: 2,
@@ -36,6 +44,11 @@ export default function Hero() {
         delay: index * 0.1
       });
     });
+
+    // Cleanup animations on unmount
+    return () => {
+      gsap.killTweensOf([heroRef.current, logoRef.current, ...lettersRef.current]);
+    };
   }, []);
 
   return (
@@ -62,7 +75,12 @@ export default function Hero() {
         />
       </div>
 
-      <div onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} className="absolute z-[9999] h-96 w-80 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
+      <div 
+        onMouseEnter={() => setIsHovered(true)} 
+        onMouseLeave={() => setIsHovered(false)} 
+        className="absolute z-[9999] h-96 w-80 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+      />
+      
       <div className="relative h-full flex flex-col items-center justify-between py-10 max-md:pb-28" ref={logoRef}>
         <h1 className="text-[2rem] md:text-[3.5rem] font-black tracking-[0.4em] text-[#bf0414] leading-none overflow-hidden text-center">
           <div className="flex items-center">
@@ -81,24 +99,10 @@ export default function Hero() {
             </div>
           </div>
         </h1>
-        <p className="text-lg md:text-xl uppercase tracking-[0.2em] text-[#f2f2f2] font-light text-center">For kids who break, & build.</p>
+        <p className="text-lg md:text-xl uppercase tracking-[0.2em] text-[#f2f2f2] font-light text-center">
+          For kids who break, & build.
+        </p>
       </div>
-
-      {/* Gradient Divider
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#121212] via-[#121212]/80 to-transparent z-10" />
-      <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-[#bf0414]/10 via-transparent to-transparent z-10" /> */}
-
-      {/* Dialog Box
-      <div className="absolute inset-0 flex items-center ml-40 justify-center z-[9999] pointer-events-none">
-        <div className="h-40 w-20 relative">
-          <div className={`absolute -top-40 -right-20 text-center left-1/2 transform -translate-x-1/2 transition-all duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
-            <div className="bg-[#121212] border border-[#bf0414] p-4 whitespace-nowrap">
-              <p className="text-[#f2f2f2] font-medium">Why not?</p>
-              <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 rotate-45 w-4 h-4 bg-[#121212] border-r border-b border-[#bf0414]"></div>
-            </div>
-          </div>
-        </div>
-      </div> */}
     </section>
   );
 } 
